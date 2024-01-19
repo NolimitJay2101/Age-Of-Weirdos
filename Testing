@@ -48,120 +48,6 @@ local MainSection = MainTab:CreateSection("Main")
 -- Farm Tab
 local FarmSection = MainTab:CreateSection("Farm")
 
--- Misc Tab
-local MiscSection = MainTab:CreateSection("Misc")
-
--- Side Tab
-local SideTab = Window:CreateTab("Side", nil) 
-local SideSection = SideTab:CreateSection("Side")
-
--- Teleport Tab
-local TeleportTab = Window:CreateTab("Teleport", nil) 
-local TeleportSection = TeleportTab:CreateSection("Teleport")
-
--- Setting Tab
-local SettingTab = Window:CreateTab("Setting", nil) 
-local SettingSection = SettingTab:CreateSection("Setting")
-
--- Rejoin Button
-SettingTab:CreateButton({
-    Name = "Rejoin",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
-    end,
-})
-
--- Inf Yield Button
-SettingTab:CreateButton({
-    Name = "Inf Yield",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-    end,
-})
-
--- WalkSpeed Slider
-SideTab:CreateSlider({
-    Name = "WalkSpeed Slider",
-    Range = {1, 350},
-    Increment = 1,
-    Suffix = "Speed",
-    CurrentValue = 16,
-    Flag = "sliderws",
-    Callback = function(Value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-    end,
-})
-
--- JumpPower Slider
-SideTab:CreateSlider({
-    Name = "JumpPower Slider",
-    Range = {1, 350},
-    Increment = 1,
-    Suffix = "Power",
-    CurrentValue = 16,
-    Flag = "sliderjp",
-    Callback = function(Value)
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-    end,
-})
-
--- Button 1: Bar
-TeleportTab:CreateButton({
-    Name = "Bar",
-    Callback = function()
-        if (_G.bring == true) then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
-        else
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
-        end
-        breakvelocity()
-    end,
-})
-
--- Button 2: City Square
-TeleportTab:CreateButton({
-    Name = "City Square",
-    Callback = function()
-        if (_G.bring == true) then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
-        else
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
-        end
-        breakvelocity()
-    end,
-})
-
--- Button 3: Motel
-TeleportTab:CreateButton({
-    Name = "Motel",
-    Callback = function()
-        if (_G.bring == true) then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1749.87, 1000, -1348.98)
-        else
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1750, 94, -1349)
-        end
-        breakvelocity()
-    end,
-})
-
--- Button 4: Secret Area
-TeleportTab:CreateButton({
-    Name = "Secret Area",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1100, 61, -1169)
-        breakvelocity()
-    end,
-})
-
--- Button 5: Secret Cave
-TeleportTab:CreateButton({
-    Name = "Secret Cave",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
-        breakvelocity()
-    end,
-})
-
 -- NPC Farm
 -- Civilian Toggle
 local Toggle = MainTab:CreateToggle({
@@ -286,5 +172,119 @@ local Toggle = MainTab:CreateToggle({
             wait(0.2)
             player.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(thugX, thugY, thugZ))
         end
+    end,
+})
+
+-- Misc Tab
+local MiscSection = MainTab:CreateSection("Misc")
+
+-- Side Tab
+local SideTab = Window:CreateTab("Side", nil) 
+local SideSection = SideTab:CreateSection("Side")
+
+-- Teleport Tab
+local TeleportTab = Window:CreateTab("Teleport", nil) 
+local TeleportSection = TeleportTab:CreateSection("Teleport")
+
+-- Setting Tab
+local SettingTab = Window:CreateTab("Setting", nil) 
+local SettingSection = SettingTab:CreateSection("Setting")
+
+-- Rejoin Button
+SettingTab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
+    end,
+})
+
+-- Inf Yield Button
+SettingTab:CreateButton({
+    Name = "Inf Yield",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+    end,
+})
+
+-- WalkSpeed Slider
+SideTab:CreateSlider({
+    Name = "WalkSpeed Slider",
+    Range = {1, 350},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Flag = "sliderws",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end,
+})
+
+-- JumpPower Slider
+SideTab:CreateSlider({
+    Name = "JumpPower Slider",
+    Range = {1, 350},
+    Increment = 1,
+    Suffix = "Power",
+    CurrentValue = 16,
+    Flag = "sliderjp",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end,
+})
+
+-- Button 1: Bar
+TeleportTab:CreateButton({
+    Name = "Bar",
+    Callback = function()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
+        end
+        breakvelocity()
+    end,
+})
+
+-- Button 2: City Square
+TeleportTab:CreateButton({
+    Name = "City Square",
+    Callback = function()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
+        end
+        breakvelocity()
+    end,
+})
+
+-- Button 3: Motel
+TeleportTab:CreateButton({
+    Name = "Motel",
+    Callback = function()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1749.87, 1000, -1348.98)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1750, 94, -1349)
+        end
+        breakvelocity()
+    end,
+})
+
+-- Button 4: Secret Area
+TeleportTab:CreateButton({
+    Name = "Secret Area",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1100, 61, -1169)
+        breakvelocity()
+    end,
+})
+
+-- Button 5: Secret Cave
+TeleportTab:CreateButton({
+    Name = "Secret Cave",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
+        breakvelocity()
     end,
 })
