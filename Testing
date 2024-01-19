@@ -45,6 +45,9 @@ Rayfield:Notify({
 local MainTab = Window:CreateTab("Main", nil) 
 local MainSection = MainTab:CreateSection("Main")
 
+-- Farm Tab
+local FarmSection = MainTab:CreateSection("Farm")
+
 -- Misc Tab
 local MiscSection = MainTab:CreateSection("Misc")
 
