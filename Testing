@@ -160,7 +160,7 @@ TeleportTab:CreateButton({
 })
 
 -- Toggle for Orb Farm in Main Section
-MainSection:CreateToggle({
+TabSection:CreateToggle({
     Name = "Orb Farm",
     Callback = function(state)
         if state then
