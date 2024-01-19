@@ -1,6 +1,6 @@
 -- Civilian Toggle
 local Toggle = MainTab:CreateToggle({
-    Name = "Civilian Toggle",
+    Name = "Civilian Farm",
     CurrentValue = false,
     Flag = "CivilianToggle",
     Callback = function(Value)
