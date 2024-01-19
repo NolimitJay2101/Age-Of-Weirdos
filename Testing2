@@ -182,7 +182,7 @@ local MiscSection = MainTab:CreateSection("Misc")
 
 -- Side Tab----------------------------------------------------------------------------------------------------
 local SideTab = Window:CreateTab("Side", nil) 
-local SideSection = Tab:CreateSection("Side")
+local SideSection = SideTab:CreateSection("Side")
 
 -- WalkSpeed Slider
 SideTab:CreateSlider({
