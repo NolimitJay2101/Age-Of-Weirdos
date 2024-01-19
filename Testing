@@ -47,12 +47,8 @@ local MainTab = Window:CreateTab("Main", nil)
 local MainSection = MainTab:CreateSection("Main")
 local MiscSection = MainTab:CreateSection("Misc")
 
-
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
-
-local TeleportTab = Window:CreateTab("Teleports", nil) 
-local TeleportSection = TeleportTab:CreateSection("Teleports")
 
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
@@ -63,7 +59,7 @@ local SettingSection = SettingTab:CreateSection("Setting")
 local Button = MainTab:CreateButton({
    Name = "Orb Farm",
    Callback = function()
-   loadstring(game:HttpGet('https://raw.githubusercontent.com/NolimitJay2101/Age-Of-Weirdos/main/Orb%20Farm%20(Working)'))()
+   loadstring(game:HttpGet('https://pastebin.com/raw/KmnC4Vk3'))()
    end,
 })
 
