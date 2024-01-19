@@ -47,6 +47,7 @@ local MainTab = Window:CreateTab("Main", nil)
 local MainSection = MainTab:CreateSection("Main")
 local MiscSection = MainTab:CreateSection("Misc")
 
+
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
 
