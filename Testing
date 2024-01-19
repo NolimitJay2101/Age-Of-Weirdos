@@ -60,24 +60,13 @@ local SettingSection = SettingTab:CreateSection("Setting")
 
 ---Buttons
 
-local Button = MiscSection:CreateButton({
+local Button = MainTab:CreateButton({
    Name = "Orb Farm",
    Callback = function()
    loadstring(game:HttpGet('https://raw.githubusercontent.com/NolimitJay2101/Age-Of-Weirdos/main/Orb%20Farm%20(Working)'))()
    end,
 })
 
-local Button = TeleportTab:CreateButton({
-    Name = "Bar",
-    Callback = function()
-       if (_G.bring == true) then
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
-       else
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
-       end
-       breakvelocity()
-    end,
- })
 
 local Button = SettingTab:CreateButton({
    Name = "Rejoin",
