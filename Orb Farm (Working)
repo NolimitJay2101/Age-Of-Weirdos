@@ -1,0 +1,36 @@
+-- Get the Workspace
+local workspace = game:GetService("Workspace")
+
+-- Specify the name of the child you want to find
+local childNameToFind = "ExperienceOrbs"
+
+-- Delay in seconds between iterations
+local delayBetweenIterations = 1  -- Adjust as needed
+
+while true do
+    -- Get the specified child
+    local experienceOrbs = workspace:FindFirstChild(childNameToFind)
+
+    -- Check if ExperienceOrbs exists in Workspace
+    if experienceOrbs then
+        -- Assuming player is defined in your script
+        local player = game.Players.LocalPlayer
+
+        -- Check if the player's character and HumanoidRootPart exist
+        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local humanoidRootPart = player.Character.HumanoidRootPart
+
+            -- Iterate through the children of ExperienceOrbs and fire touch interest
+            for _, child in pairs(experienceOrbs:GetChildren()) do
+                firetouchinterest(humanoidRootPart, child, 0)
+            end
+        else
+            warn("Player or HumanoidRootPart not found.")
+        end
+    else
+        warn("ExperienceOrbs not found in Workspace.")
+    end
+
+    -- Delay before the next iteration
+    wait(delayBetweenIterations)
+end
