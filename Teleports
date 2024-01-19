@@ -205,61 +205,35 @@ local Toggle = MainTab:CreateToggle({
     Name = "Police Farm",
     CurrentValue = false,
     Flag = "PoliceFarmToggle",
-    Callback = function(state)
-        if state then
+    Callback = function(value)
+        if value then
+            -- Toggle is turned ON
             PoliceX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
             PoliceY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
             PoliceZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
             getgenv().Police = true;
-            while getgenv().Police do
-                wait(0.2);
-                pcall(function()
-                    for _, v in pairs(game.Workspace:GetChildren()) do
-                        game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
-                        if v:IsA("Model") and v.Name == "Police" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+
+            spawn(function()
+                while getgenv().Police do
+                    wait(0.2);
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
                             game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                            if v:IsA("Model") and v.Name == "Police" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                            end
                         end
-                    end
-                end);
-            end
+                    end);
+                end
+            end);
+
         else
+            -- Toggle is turned OFF
             spawn(function()
                 getgenv().Police = false;
                 wait(0.2);
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(PoliceX, PoliceY, PoliceZ);
-            end);
-        end
-    end,
-})
-
--- Thug Farm Toggle
-local Toggle = MainTab:CreateToggle({
-    Name = "Thug Farm",
-    CurrentValue = false,
-    Flag = "ThugFarmToggle",
-    Callback = function(state)
-        if state then
-            ThugX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
-            ThugY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
-            ThugZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
-            getgenv().Thug = true;
-            while getgenv().Thug do
-                wait(0.2);
-                pcall(function()
-                    for _, v in pairs(game.Workspace:GetChildren()) do
-                        game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
-                        if v:IsA("Model") and v.Name == "Thug" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
-                        end
-                    end
-                end);
-            end
-        else
-            spawn(function()
-                getgenv().Thug = false;
-                wait(0.2);
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(ThugX, ThugY, ThugZ);
             end);
         end
     end,
