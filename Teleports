@@ -1,51 +1,266 @@
-local Button = Tab:CreateButton({
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Age of Weirdos",
+    LoadingTitle = "Age of Weirdos",
+    LoadingSubtitle = "DAMN.Jay",
+    ConfigurationSaving = {
+        Enabled = false,
+        FolderName = nil,
+        FileName = "Big Hub"
+    },
+    Discord = {
+        Enabled = false,
+        Invite = "noinvitelink",
+        RememberJoins = true
+    },
+    KeySystem = false,
+    KeySettings = {
+        Title = "Untitled",
+        Subtitle = "Key System",
+        Note = "No method of obtaining the key is provided",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {"Hello"}
+    }
+})
+
+Rayfield:Notify({
+    Title = "Welcome To Age Of Weirdos",
+    Content = "Worst Game",
+    Duration = 5,
+    Image = nil,
+    Actions = {
+        Ignore = {
+            Name = "Okay!",
+            Callback = function()
+                print("The user tapped Okay!")
+            end
+        },
+    },
+})
+
+-- Main Tab
+local MainTab = Window:CreateTab("Main", nil) 
+local MainSection = MainTab:CreateSection("Main")
+
+-- Misc Tab
+local MiscSection = MainTab:CreateSection("Misc")
+
+-- Side Tab
+local SideTab = Window:CreateTab("Side", nil) 
+local SideSection = SideTab:CreateSection("Side")
+
+-- Teleport Tab
+local TeleportTab = Window:CreateTab("Teleport", nil) 
+local TeleportSection = TeleportTab:CreateSection("Teleport")
+
+-- Setting Tab
+local SettingTab = Window:CreateTab("Setting", nil) 
+local SettingSection = SettingTab:CreateSection("Setting")
+
+-- Rejoin Button
+SettingTab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
+    end,
+})
+
+-- Inf Yield Button
+SettingTab:CreateButton({
+    Name = "Inf Yield",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+    end,
+})
+
+-- WalkSpeed Slider
+SideTab:CreateSlider({
+    Name = "WalkSpeed Slider",
+    Range = {1, 350},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Flag = "sliderws",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end,
+})
+
+-- JumpPower Slider
+SideTab:CreateSlider({
+    Name = "JumpPower Slider",
+    Range = {1, 350},
+    Increment = 1,
+    Suffix = "Power",
+    CurrentValue = 16,
+    Flag = "sliderjp",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end,
+})
+
+-- Button 1: Bar
+TeleportTab:CreateButton({
     Name = "Bar",
     Callback = function()
-       if (_G.bring == true) then
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
-       else
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
-       end
-       breakvelocity()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
+        end
+        breakvelocity()
     end,
- })
-
-local CitySquareButton = Tab:CreateButton({
-   Name = "City Square",
-   Callback = function()
-      if (_G.bring == true) then
-         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
-      else
-         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
-      end
-      breakvelocity()
-   end,
 })
 
-local MotelButton = Tab:CreateButton({
-   Name = "Motel",
-   Callback = function()
-      if (_G.bring == true) then
-         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1749.87, 1000, -1348.98)
-      else
-         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1750, 94, -1349)
-      end
-      breakvelocity()
-   end,
+-- Button 2: City Square
+TeleportTab:CreateButton({
+    Name = "City Square",
+    Callback = function()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
+        end
+        breakvelocity()
+    end,
 })
 
-local SecretAreaButton = Tab:CreateButton({
-   Name = "Secret Area",
-   Callback = function()
-      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1100, 61, -1169)
-      breakvelocity()
-   end,
+-- Button 3: Motel
+TeleportTab:CreateButton({
+    Name = "Motel",
+    Callback = function()
+        if (_G.bring == true) then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1749.87, 1000, -1348.98)
+        else
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1750, 94, -1349)
+        end
+        breakvelocity()
+    end,
 })
 
-local SecretCaveButton = Tab:CreateButton({
-   Name = "Secret Cave",
-   Callback = function()
-      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
-      breakvelocity()
-   end,
+-- Button 4: Secret Area
+TeleportTab:CreateButton({
+    Name = "Secret Area",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1100, 61, -1169)
+        breakvelocity()
+    end,
+})
+
+-- Button 5: Secret Cave
+TeleportTab:CreateButton({
+    Name = "Secret Cave",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
+        breakvelocity()
+    end,
+})
+
+-- Civilian Toggle
+local Toggle = MainTab:CreateToggle({
+    Name = "Civilian Toggle",
+    CurrentValue = false,
+    Flag = "CivilianToggle",
+    Callback = function(Value)
+        if Value then
+            -- Toggle is turned ON
+            getgenv().Civilian = true;
+
+            local CivilianX, CivilianY, CivilianZ;
+
+            spawn(function()
+                while getgenv().Civilian do
+                    wait(0.2);
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                            if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
+                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame;
+                            end
+                        end
+                    end);
+                end
+            end);
+
+            -- Save current position
+            CivilianX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
+            CivilianY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
+            CivilianZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+        else
+            -- Toggle is turned OFF
+            getgenv().Civilian = false;
+            wait(0.2);
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
+        end
+    end,
+})
+
+-- Police Farm Toggle
+local PoliceFarmToggle = MainSection:CreateToggle({
+    Name = "Police Farm",
+    CurrentValue = false,
+    Flag = "PoliceFarmToggle",
+    Callback = function(state)
+        if state then
+            PoliceX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
+            PoliceY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
+            PoliceZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+            getgenv().Police = true;
+            while getgenv().Police do
+                wait(0.2);
+                pcall(function()
+                    for _, v in pairs(game.Workspace:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                        if v:IsA("Model") and v.Name == "Police" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                        end
+                    end
+                end);
+            end
+        else
+            spawn(function()
+                getgenv().Police = false;
+                wait(0.2);
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(PoliceX, PoliceY, PoliceZ);
+            end);
+        end
+    end,
+})
+
+-- Thug Farm Toggle
+local ThugFarmToggle = MainSection:CreateToggle({
+    Name = "Thug Farm",
+    CurrentValue = false,
+    Flag = "ThugFarmToggle",
+    Callback = function(state)
+        if state then
+            ThugX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
+            ThugY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
+            ThugZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+            getgenv().Thug = true;
+            while getgenv().Thug do
+                wait(0.2);
+                pcall(function()
+                    for _, v in pairs(game.Workspace:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                        if v:IsA("Model") and v.Name == "Thug" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                        end
+                    end
+                end);
+            end
+        else
+            spawn(function()
+                getgenv().Thug = false;
+                wait(0.2);
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(ThugX, ThugY, ThugZ);
+            end);
+        end
+    end,
 })
