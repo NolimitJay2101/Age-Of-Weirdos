@@ -52,6 +52,10 @@ local MiscSection = MainTab:CreateSection("Misc")
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
 
+-- Teleport Tab
+local TeleportTab = Window:CreateTab("Teleport", nil) 
+local TeleportSection = TeleportTab:CreateSection("Teleport")
+
 -- Setting Tab
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
@@ -97,10 +101,6 @@ SideTab:CreateSlider({
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
 })
-
--- Teleport Tab
-local TeleportTab = Window:CreateTab("Teleport", nil) 
-local TeleportSection = TeleportTab:CreateSection("Teleport")
 
 -- Button 1: Bar
 TeleportTab:CreateButton({
@@ -199,3 +199,4 @@ local Toggle = MainTab:CreateToggle({
         end
     end,
 })
+ 
