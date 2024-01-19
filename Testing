@@ -158,3 +158,28 @@ TeleportTab:CreateButton({
         breakvelocity()
     end,
 })
+
+-- Toggle for Orb Farm in Main Section
+MainSection:CreateToggle({
+    Name = "Orb Farm",
+    Callback = function(state)
+        if state then
+            getgenv().OrbFarm = true
+            repeat
+                local Playerhead = game.Players.LocalPlayer.Character.Head
+                spawn(function()
+                    for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                        if v.Name == "TouchInterest" and v.Parent then
+                            firetouchinterest(Playerhead, v.Parent, 0)
+                        end
+                    end
+                end)
+                wait(15)
+            until not getgenv().OrbFarm
+        else
+            spawn(function()
+                getgenv().OrbFarm = false
+            end)
+        end
+    end
+})
