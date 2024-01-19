@@ -44,9 +44,7 @@ Rayfield:Notify({
 -- Main Tab
 local MainTab = Window:CreateTab("Main", nil) 
 local MainSection = MainTab:CreateSection("Main")
-
--- Misc Tab
-local MiscSection = MainTab:CreateSection("Misc")
+local MiscSection = MainTab:CreateSection("Misc") -- New Misc Section
 
 -- Side Tab
 local SideTab = Window:CreateTab("Side", nil) 
@@ -159,8 +157,8 @@ TeleportTab:CreateButton({
     end,
 })
 
--- Toggle for Orb Farm in Main Section
-TabSection:CreateToggle({
+-- Toggle for Orb Farm in Misc Section (now in Main Tab)
+MiscSection:CreateToggle({
     Name = "Orb Farm",
     Callback = function(state)
         if state then
