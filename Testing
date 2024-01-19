@@ -79,6 +79,18 @@ local Button = TeleportTab:CreateButton({
     end,
  })
 
+ local CitySquareButton = TeleportTab:CreateButton({
+    Name = "City Square",
+    Callback = function()
+       if (_G.bring == true) then
+          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
+       else
+          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
+       end
+       breakvelocity()
+    end,
+ })
+ 
 local Button = SettingTab:CreateButton({
    Name = "Rejoin",
    Callback = function()
