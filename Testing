@@ -44,7 +44,9 @@ Rayfield:Notify({
 -- Main Tab
 local MainTab = Window:CreateTab("Main", nil) 
 local MainSection = MainTab:CreateSection("Main")
-local MiscSection = MainTab:CreateSection("Misc") -- New Misc Section
+
+-- Misc Tab
+local MiscSection = MainTab:CreateSection("Misc")
 
 -- Side Tab
 local SideTab = Window:CreateTab("Side", nil) 
@@ -53,6 +55,47 @@ local SideSection = SideTab:CreateSection("Side")
 -- Setting Tab
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
+
+-- Toggle for Civilian
+local ToggleCivilian = SettingTab:CreateToggle({
+    Name = "Civilian Toggle",
+    CurrentValue = false,
+    Flag = "CivilianToggle",
+    Callback = function(Value)
+            -- Toggle is turned ON
+            getgenv().Civilian = true;
+
+            local CivilianX, CivilianY, CivilianZ;
+
+            spawn(function()
+                while getgenv().Civilian do
+                    wait(0.2);
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                            if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
+                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame;
+                            end
+                        end
+                    end);
+                end
+            end);
+
+            -- Save current position
+            CivilianX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
+            CivilianY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
+            CivilianZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+        else
+            -- Toggle is turned OFF
+            getgenv().Civilian = false;
+            wait(0.2);
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
+        end
+    end,
+})
+
 
 -- Rejoin Button
 SettingTab:CreateButton({
@@ -155,29 +198,4 @@ TeleportTab:CreateButton({
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
         breakvelocity()
     end,
-})
-
--- Toggle for Orb Farm in Misc Section (now in Main Tab)
-MiscSection:CreateToggle({
-    Name = "Orb Farm",
-    Callback = function(state)
-        if state then
-            getgenv().OrbFarm = true
-            repeat
-                local Playerhead = game.Players.LocalPlayer.Character.Head
-                spawn(function()
-                    for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
-                        if v.Name == "TouchInterest" and v.Parent then
-                            firetouchinterest(Playerhead, v.Parent, 0)
-                        end
-                    end
-                end)
-                wait(15)
-            until not getgenv().OrbFarm
-        else
-            spawn(function()
-                getgenv().OrbFarm = false
-            end)
-        end
-    end
 })
