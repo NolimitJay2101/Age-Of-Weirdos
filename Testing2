@@ -41,7 +41,7 @@ Rayfield:Notify({
     },
 })
 
--- Main Tab
+-- Main Tab ----------------------------------------------------------------------------------------------------
 local MainTab = Window:CreateTab("Main", nil) 
 local MainSection = MainTab:CreateSection("Main")
 
@@ -175,36 +175,14 @@ local Toggle = MainTab:CreateToggle({
     end,
 })
 
--- Misc Tab
+-- Misc Tab----------------------------------------------------------------------------------------------------
 local MiscSection = MainTab:CreateSection("Misc")
 
--- Side Tab
+
+
+-- Side Tab----------------------------------------------------------------------------------------------------
 local SideTab = Window:CreateTab("Side", nil) 
-local SideSection = SideTab:CreateSection("Side")
-
--- Teleport Tab
-local TeleportTab = Window:CreateTab("Teleport", nil) 
-local TeleportSection = TeleportTab:CreateSection("Teleport")
-
--- Setting Tab
-local SettingTab = Window:CreateTab("Setting", nil) 
-local SettingSection = SettingTab:CreateSection("Setting")
-
--- Rejoin Button
-SettingTab:CreateButton({
-    Name = "Rejoin",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
-    end,
-})
-
--- Inf Yield Button
-SettingTab:CreateButton({
-    Name = "Inf Yield",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-    end,
-})
+local SideSection = Tab:CreateSection("Side")
 
 -- WalkSpeed Slider
 SideTab:CreateSlider({
@@ -231,6 +209,10 @@ SideTab:CreateSlider({
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
 })
+
+-- Teleport Tab----------------------------------------------------------------------------------------------------
+local TeleportTab = Window:CreateTab("Teleport", nil) 
+local TeleportSection = TeleportTab:CreateSection("Teleport")
 
 -- Button 1: Bar
 TeleportTab:CreateButton({
@@ -286,5 +268,25 @@ TeleportTab:CreateButton({
     Callback = function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
         breakvelocity()
+    end,
+})
+
+-- Setting Tab
+local SettingTab = Window:CreateTab("Setting", nil) 
+local SettingSection = SettingTab:CreateSection("Setting")
+
+-- Rejoin Button
+SettingTab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
+    end,
+})
+
+-- Inf Yield Button
+SettingTab:CreateButton({
+    Name = "Inf Yield",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
     end,
 })
