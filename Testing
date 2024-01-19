@@ -51,6 +51,9 @@ local MiscSection = MainTab:CreateSection("Misc")
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
 
+local TeleportTab = Window:CreateTab("Teleports", nil) 
+local TeleportSection = TeleportTab:CreateSection("Teleports")
+
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
 
@@ -64,7 +67,7 @@ local Button = MainTab:CreateButton({
    end,
 })
 
-local Button = MainTab:CreateButton({
+local Button = TeleportTab:CreateButton({
     Name = "Bar",
     Callback = function()
        if (_G.bring == true) then
