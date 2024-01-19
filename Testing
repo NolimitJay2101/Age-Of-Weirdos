@@ -47,7 +47,6 @@ local MainTab = Window:CreateTab("Main", nil)
 local MainSection = MainTab:CreateSection("Main")
 local MiscSection = MainTab:CreateSection("Misc")
 
-
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
 
@@ -60,7 +59,7 @@ local SettingSection = SettingTab:CreateSection("Setting")
 local Button = MainTab:CreateButton({
    Name = "Orb Farm",
    Callback = function()
-   loadstring(game:HttpGet('https://pastebin.com/raw/KmnC4Vk3'))()
+   loadstring(game:HttpGet('https://github.com/NolimitJay2101/Age-Of-Weirdos/blob/main/Orb%20Farm%20(Working)'))()
    end,
 })
 
@@ -68,14 +67,14 @@ local Button = MainTab:CreateButton({
 local Button = SettingTab:CreateButton({
    Name = "Rejoin",
    Callback = function()
-      loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
+   loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
    end,
 })
 
 local Button = SettingTab:CreateButton({
    Name = "Inf Yield",
    Callback = function()
-      loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
    end,
 })
 
