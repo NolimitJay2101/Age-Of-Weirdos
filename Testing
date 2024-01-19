@@ -56,47 +56,6 @@ local SideSection = SideTab:CreateSection("Side")
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
 
--- Toggle for Civilian
-local ToggleCivilian = SettingTab:CreateToggle({
-    Name = "Civilian Toggle",
-    CurrentValue = false,
-    Flag = "CivilianToggle",
-    Callback = function(Value)
-            -- Toggle is turned ON
-            getgenv().Civilian = true;
-
-            local CivilianX, CivilianY, CivilianZ;
-
-            spawn(function()
-                while getgenv().Civilian do
-                    wait(0.2);
-                    pcall(function()
-                        for _, v in pairs(game.Workspace:GetChildren()) do
-                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
-                            if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
-                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame;
-                            end
-                        end
-                    end);
-                end
-            end);
-
-            -- Save current position
-            CivilianX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
-            CivilianY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
-            CivilianZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
-        else
-            -- Toggle is turned OFF
-            getgenv().Civilian = false;
-            wait(0.2);
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
-        end
-    end,
-})
-
-
 -- Rejoin Button
 SettingTab:CreateButton({
     Name = "Rejoin",
@@ -197,5 +156,46 @@ TeleportTab:CreateButton({
     Callback = function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
         breakvelocity()
+    end,
+})
+
+-- Civilian Toggle
+local Toggle = MainTab:CreateToggle({
+    Name = "Civilian Toggle",
+    CurrentValue = false,
+    Flag = "CivilianToggle",
+    Callback = function(Value)
+        if Value then
+            -- Toggle is turned ON
+            getgenv().Civilian = true;
+
+            local CivilianX, CivilianY, CivilianZ;
+
+            spawn(function()
+                while getgenv().Civilian do
+                    wait(0.2);
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
+                            if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
+                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame;
+                            end
+                        end
+                    end);
+                end
+            end);
+
+            -- Save current position
+            CivilianX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
+            CivilianY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
+            CivilianZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+        else
+            -- Toggle is turned OFF
+            getgenv().Civilian = false;
+            wait(0.2);
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
+        end
     end,
 })
