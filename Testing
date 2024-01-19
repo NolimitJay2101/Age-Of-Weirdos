@@ -56,14 +56,6 @@ local SettingSection = SettingTab:CreateSection("Setting")
 
 ---Buttons
 
-local Button = MainTab:CreateButton({
-   Name = "Orb Farm",
-   Callback = function()
-   loadstring(game:HttpGet('https://github.com/NolimitJay2101/Age-Of-Weirdos/blob/main/Orb%20Farm%20(Working)'))()
-   end,
-})
-
-
 local Button = SettingTab:CreateButton({
    Name = "Rejoin",
    Callback = function()
@@ -102,4 +94,30 @@ local Slider = SideTab:CreateSlider({
    Callback = function(Value)
    game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
+})
+
+---Toggles
+
+local Toggle = MainSection:NewToggle({
+   Name = "Autofarm Orbs",
+   Callback = function(state)
+       if state then
+           getgenv().OrbFarm = true
+           repeat
+               local Playerhead = game.Players.LocalPlayer.Character.Head
+               spawn(function()
+                   for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                       if v.Name == "TouchInterest" and v.Parent then
+                           firetouchinterest(Playerhead, v.Parent, 0)
+                       end
+                   end
+               end)
+               wait(15)
+           until not getgenv().OrbFarm
+       else
+           spawn(function()
+               getgenv().OrbFarm = false
+           end)
+       end
+   end
 })
