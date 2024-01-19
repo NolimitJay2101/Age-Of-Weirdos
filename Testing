@@ -51,8 +51,11 @@ local MiscSection = MainTab:CreateSection("Misc")
 local SideTab = Window:CreateTab("Side", nil) 
 local SideSection = SideTab:CreateSection("Side")
 
-local TeleportTab = Window:CreateTab("Teleports", nil) 
-local TeleportSection = TeleportTab:CreateSection("Teleports")
+local SideTab = Window:CreateTab("Teleport", nil) 
+local TeleportTab = Tab:CreateTab({
+   Name = "TeleportTab",
+   LayoutOrder = 1 -- Adjust the order as needed
+})
 
 local SettingTab = Window:CreateTab("Setting", nil) 
 local SettingSection = SettingTab:CreateSection("Setting")
@@ -67,30 +70,59 @@ local Button = MainTab:CreateButton({
    end,
 })
 
-local Button = TeleportTab:CreateButton({
-    Name = "Bar",
-    Callback = function()
-       if (_G.bring == true) then
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
-       else
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
-       end
-       breakvelocity()
-    end,
- })
+local BarButton = TeleportTab:CreateButton({
+   Name = "Bar",
+   Callback = function()
+      if (_G.bring == true) then
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 1000, 149)
+      else
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1313, 197, 149)
+      end
+      breakvelocity()
+   end,
+})
 
- local CitySquareButton = TeleportTab:CreateButton({
-    Name = "City Square",
-    Callback = function()
-       if (_G.bring == true) then
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
-       else
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
-       end
-       breakvelocity()
-    end,
- })
- 
+local CitySquareButton = TeleportTab:CreateButton({
+   Name = "City Square",
+   Callback = function()
+      if (_G.bring == true) then
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 1000, 256)
+      else
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-385, 86, 256)
+      end
+      breakvelocity()
+   end,
+})
+
+local MotelButton = TeleportTab:CreateButton({
+   Name = "Motel",
+   Callback = function()
+      if (_G.bring == true) then
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1749.87, 1000, -1348.98)
+      else
+         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1750, 94, -1349)
+      end
+      breakvelocity()
+   end,
+})
+
+local SecretAreaButton = TeleportTab:CreateButton({
+   Name = "Secret Area",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1100, 61, -1169)
+      breakvelocity()
+   end,
+})
+
+local SecretCaveButton = TeleportTab:CreateButton({
+   Name = "Secret Cave",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(269, -59, 2729)
+      breakvelocity()
+   end,
+})
+
+
 local Button = SettingTab:CreateButton({
    Name = "Rejoin",
    Callback = function()
