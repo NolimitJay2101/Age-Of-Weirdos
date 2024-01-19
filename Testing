@@ -98,7 +98,7 @@ local Slider = SideTab:CreateSlider({
 
 ---Toggles
 
-local Toggle = MainSection:NewToggle({
+local Toggle = MainTab:NewToggle({
    Name = "Autofarm Orbs",
    Callback = function(state)
        if state then
