@@ -210,7 +210,7 @@ local Toggle = MainTab:CreateToggle({
 -- Misc Tab----------------------------------------------------------------------------------------------------
 local MiscSection = MainTab:CreateSection("Misc")
 
-local AutoStatsDropdown = MainTab:CreateDropdown({
+local Dropdown = MainTab:CreateDropdown({
    Name = "AutoStats",
    Options = {"vitality", "healing", "strength", "energy", "flight", "speed", "climbing", "swinging", "fireball", "frost", "lightning", "power", "telekinesis", "shield", "laserVision", "metalSkin"},
    CurrentOption = {"vitality"}, -- Set an initial value if needed
@@ -221,7 +221,7 @@ local AutoStatsDropdown = MainTab:CreateDropdown({
    end,
 })
 
-local AutoStatsToggle = MainTab:CreateToggle({
+local Toggle = MainTab:CreateToggle({
    Name = "Toggle AutoStats",
    CurrentValue = false,
    Flag = "AutoStatsToggle", -- Adjust the flag accordingly
@@ -241,7 +241,6 @@ local AutoStatsToggle = MainTab:CreateToggle({
        end
    end,
 })
-
 
 -- Side Tab----------------------------------------------------------------------------------------------------
 local SideTab = Window:CreateTab("Side", nil) 
