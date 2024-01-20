@@ -42,7 +42,7 @@ Rayfield:Notify({
 })
 
 -- Main Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local FarmTab = Window:CreateTab("Farm", nil) 
+local FarmTab = Window:CreateTab("Tab Example") -- Title, Image
 local FarmSection = Tab:CreateSection("Farm")
 
 local OrbFarmToggle = FarmTab:CreateToggle({
