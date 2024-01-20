@@ -210,35 +210,23 @@ local Toggle = MainTab:CreateToggle({
 -- Misc Tab----------------------------------------------------------------------------------------------------
 local MiscSection = MainTab:CreateSection("Misc")
 
-local Dropdown = MainTab:CreateDropdown({
-   Name = "AutoStats",
-   Options = {"vitality", "healing", "strength", "energy", "flight", "speed", "climbing", "swinging", "fireball", "frost", "lightning", "power", "telekinesis", "shield", "laserVision", "metalSkin"},
-   CurrentOption = {"vitality"}, -- Set an initial value if needed
-   MultipleOptions = false,
-   Flag = "AutoStatsDropdown", -- Adjust the flag accordingly
-   Callback = function(currentOption)
-       selectedstat = currentOption
-   end,
-})
+MainTab:NewDropdown("AutoStats", "", {"vitality","healing","strength","energy","flight","speed","climbing","swinging","fireball","frost","lightning","power","telekinesis","shield","laserVision","metalSkin"}, function(currentOption)
+    selectedstat = currentOption
+end)
 
-local Toggle = MainTab:CreateToggle({
-   Name = "Toggle AutoStats",
-   CurrentValue = false,
-   Flag = "AutoStatsToggle", -- Adjust the flag accordingly
-   Callback = function(state)
-       if state then
-           getgenv().AutoStats = true
-           while AutoStats do
-               wait(0.1)
-               spawn(function()
-                   game:GetService("ReplicatedStorage").Events.UpgradeAbility:InvokeServer(selectedstat)
-               end)
-           end
-       else
-           getgenv().AutoStats = false
-       end
-   end,
-})
+MainTab:NewToggle("Toggle AutoStats", "", function(state)
+    if state then
+        getgenv().AutoStats = true
+        while getgenv().AutoStats do
+            wait(0.1)
+            spawn(function()
+                game:GetService("ReplicatedStorage").Events.UpgradeAbility:InvokeServer(selectedstat)
+            end)
+        end
+    else
+        getgenv().AutoStats = false
+    end
+end)
 
 -- Side Tab----------------------------------------------------------------------------------------------------
 local SideTab = Window:CreateTab("Side", nil) 
