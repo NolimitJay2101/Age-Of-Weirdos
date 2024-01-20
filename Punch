@@ -1,3 +1,6 @@
+-- Misc Tab----------------------------------------------------------------------------------------------------
+local MiscSection = MainTab:CreateSection("Misc")
+
 local Toggle = MainTab:CreateToggle({
     Name = "Rapid Punch",
     CurrentValue = false,
