@@ -153,7 +153,7 @@ local Toggle = MainTab:CreateToggle({
     end,
 })
 
-local AntitelekinesisToggle = MainTab:CreateToggle({
+local Toggle = MainTab:CreateToggle({
     Name = "Antitelekinesis",
     CurrentValue = false,
     Flag = "AntitelekinesisToggle",
@@ -161,7 +161,7 @@ local AntitelekinesisToggle = MainTab:CreateToggle({
         if state then
             getgenv().localtele = true
             spawn(function()
-                while localtele do
+                while getgenv().localtele do
                     game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[_G.LOCALPLAYER].Character)
                     wait()
                 end
@@ -169,28 +169,6 @@ local AntitelekinesisToggle = MainTab:CreateToggle({
         else
             spawn(function()
                 getgenv().localtele = false
-            end)
-        end
-    end,
-})
-
-local TelekinesisSpaceFlingToggle = MainTab:CreateToggle({
-    Name = "Telekinesis Space Fling",
-    CurrentValue = false,
-    Flag = "TelekinesisSpaceFlingToggle",
-    Callback = function(state)
-        if state then
-            getgenv().telesauras = true
-            while telesauras do
-                wait(0.2)
-                spawn(function()
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
-                end)
-            end
-        else
-            spawn(function()
-                getgenv().telesauras = false
             end)
         end
     end,
