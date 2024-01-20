@@ -235,9 +235,7 @@ local Toggle = MainTab:CreateToggle({
                end)
            end
        else
-           spawn(function()
-               getgenv().AutoStats = false
-           end)
+           getgenv().AutoStats = false
        end
    end,
 })
