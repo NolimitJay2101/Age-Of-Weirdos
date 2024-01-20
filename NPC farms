@@ -1,3 +1,43 @@
+-- Main Tab ----------------------------------------------------------------------------------------------------
+local MainTab = Window:CreateTab("Main", nil) 
+local MainSection = MainTab:CreateSection("Main")
+
+-- Farm Tab
+local FarmSection = MainTab:CreateSection("Farm")
+
+local OrbFarmToggle = MainTab:CreateToggle({
+   Name = "Orb Farm",
+   CurrentValue = false,
+   Flag = "OrbFarmToggle",
+   Callback = function(Value)
+       if Value then
+           -- Toggle is turned ON
+           getgenv().OrbFarm = true;
+
+           local function orbFarmLogic()
+               local Playerhead = game.Players.LocalPlayer.Character.Head;
+               for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                   if v.Name == "TouchInterest" and v.Parent then
+                       firetouchinterest(Playerhead, v.Parent, 0);
+                   end
+               end
+           end
+
+           spawn(function()
+               while getgenv().OrbFarm do
+                   wait(15);
+                   pcall(orbFarmLogic);
+               end
+           end);
+       else
+           -- Toggle is turned OFF
+           getgenv().OrbFarm = false;
+       end
+   end,
+})
+
+
+-- NPC Farm
 -- Civilian Toggle
 local Toggle = MainTab:CreateToggle({
     Name = "Civilian Farm",
