@@ -45,9 +45,6 @@ Rayfield:Notify({
 local MainTab = Window:CreateTab("Main", nil) 
 local MainSection = MainTab:CreateSection("Main")
 
--- Misc Tab--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local MiscSection = MainTab:CreateSection("Misc")
-
 local Toggle = MainTab:CreateToggle({
     Name = "Rapid Punch",
     CurrentValue = false,
@@ -155,44 +152,45 @@ local Toggle = MainTab:CreateToggle({
         end
     end,
 })
--- Farm Tab--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local FarmTab = Window:CreateTab("Farm", nil)
-local FarmSection = FarmTab:CreateSection("AutoFarm")
 
-local OrbFarmToggle = FarmTab:CreateToggle({
-    Name = "Orb Farm",
-    CurrentValue = false,
-    Flag = "OrbFarmToggle",
-    Callback = function(Value)
-        if Value then
-            -- Toggle is turned ON
-            getgenv().OrbFarm = true;
- 
-            local function orbFarmLogic()
-                local Playerhead = game.Players.LocalPlayer.Character.Head;
-                for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
-                    if v.Name == "TouchInterest" and v.Parent then
-                        firetouchinterest(Playerhead, v.Parent, 0);
-                    end
-                end
-            end
- 
-            spawn(function()
-                while getgenv().OrbFarm do
-                    wait(15);
-                    pcall(orbFarmLogic);
-                end
-            end);
-        else
-            -- Toggle is turned OFF
-            getgenv().OrbFarm = false;
-        end
-    end,
- })
+-- Farm Tab
+local FarmSection = MainTab:CreateSection("Farm")
+
+local OrbFarmToggle = MainTab:CreateToggle({
+   Name = "Orb Farm",
+   CurrentValue = false,
+   Flag = "OrbFarmToggle",
+   Callback = function(Value)
+       if Value then
+           -- Toggle is turned ON
+           getgenv().OrbFarm = true;
+
+           local function orbFarmLogic()
+               local Playerhead = game.Players.LocalPlayer.Character.Head;
+               for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                   if v.Name == "TouchInterest" and v.Parent then
+                       firetouchinterest(Playerhead, v.Parent, 0);
+                   end
+               end
+           end
+
+           spawn(function()
+               while getgenv().OrbFarm do
+                   wait(15);
+                   pcall(orbFarmLogic);
+               end
+           end);
+       else
+           -- Toggle is turned OFF
+           getgenv().OrbFarm = false;
+       end
+   end,
+})
+
 
 -- NPC Farm
 -- Civilian Toggle
-local Toggle = FarmTab:CreateToggle({
+local Toggle = MainTab:CreateToggle({
     Name = "Civilian Farm",
     CurrentValue = false,
     Flag = "CivilianToggle",
@@ -228,6 +226,91 @@ local Toggle = FarmTab:CreateToggle({
             getgenv().Civilian = false;
             wait(0.2);
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
+        end
+    end,
+})
+
+-- Police Toggle
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Police Farm",
+    CurrentValue = false,
+    Flag = "PoliceFarmToggle",
+    Callback = function(Value)
+        if Value then
+            -- Toggle is turned ON
+            getgenv().Police = true
+
+            local PoliceX, PoliceY, PoliceZ
+
+            spawn(function()
+                while getgenv().Police do
+                    wait(0.2)
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            if v:IsA("Model") and v.Name == "Police" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame
+                            end
+                        end
+                    end)
+                end
+            end)
+
+            -- Save current position
+            PoliceX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X
+            PoliceY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y
+            PoliceZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z
+        else
+            -- Toggle is turned OFF
+            getgenv().Police = false
+            wait(0.2)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(PoliceX, PoliceY, PoliceZ))
+        end
+    end,
+})
+
+-- Thug Toggle
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Thug Farm",
+    CurrentValue = false,
+    Flag = "ThugFarmToggle",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        local thugX, thugY, thugZ
+
+        if Value then
+            -- Toggle is turned ON
+            getgenv().Thug = true
+
+            spawn(function()
+                while getgenv().Thug do
+                    wait(0.2)
+                    pcall(function()
+                        for _, v in pairs(game.Workspace:GetChildren()) do
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            if v:IsA("Model") and v.Name == "Thug" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                local playerCFrame = player.Character.HumanoidRootPart.CFrame
+                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
+                                player.Character.HumanoidRootPart.CFrame = playerCFrame
+                            end
+                        end
+                    end)
+                end
+            end)
+
+            -- Save current position
+            thugX = player.Character.HumanoidRootPart.Position.X
+            thugY = player.Character.HumanoidRootPart.Position.Y
+            thugZ = player.Character.HumanoidRootPart.Position.Z
+        else
+            -- Toggle is turned OFF
+            getgenv().Thug = false
+            wait(0.2)
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(thugX, thugY, thugZ))
         end
     end,
 })
@@ -342,6 +425,3 @@ SettingTab:CreateButton({
         loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
     end,
 })
-
-local FarmTab = Window:CreateTab("Farm", nil)
-local FarmSection = FarmTab:CreateSection("Farm")
