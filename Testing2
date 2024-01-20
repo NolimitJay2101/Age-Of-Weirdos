@@ -187,7 +187,6 @@ local OrbFarmToggle = MainTab:CreateToggle({
    end,
 })
 
-
 -- NPC Farm
 -- Civilian Toggle
 local Toggle = MainTab:CreateToggle({
@@ -231,7 +230,6 @@ local Toggle = MainTab:CreateToggle({
 })
 
 -- Police Toggle
-
 local Toggle = MainTab:CreateToggle({
     Name = "Police Farm",
     CurrentValue = false,
@@ -273,7 +271,6 @@ local Toggle = MainTab:CreateToggle({
 })
 
 -- Thug Toggle
-
 local Toggle = MainTab:CreateToggle({
     Name = "Thug Farm",
     CurrentValue = false,
@@ -331,7 +328,6 @@ SideTab:CreateSlider({
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
     end,
 })
-
 -- JumpPower Slider
 SideTab:CreateSlider({
     Name = "JumpPower Slider",
