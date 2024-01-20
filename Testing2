@@ -210,6 +210,41 @@ local Toggle = MainTab:CreateToggle({
 -- Misc Tab----------------------------------------------------------------------------------------------------
 local MiscSection = MainTab:CreateSection("Misc")
 
+local Dropdown = Tab:CreateDropdown({
+   Name = "AutoStats",
+   Options = {"vitality", "healing", "strength", "energy", "flight", "speed", "climbing", "swinging", "fireball", "frost", "lightning", "power", "telekinesis", "shield", "laserVision", "metalSkin"},
+   CurrentOption = {"vitality"},
+   MultipleOptions = false,
+   Flag = "AutoStatsDropdown", -- Adjust the flag accordingly
+   Callback = function(Option)
+       -- The function that takes place when the selected option is changed
+       -- The variable (Option) is a table of strings for the current selected options
+       selectedstat = Option[1]
+   end,
+})
+
+local AutoStatsToggle = Tab:CreateToggle({
+   Name = "Toggle AutoStats",
+   CurrentValue = false,
+   Flag = "AutoStatsToggle", -- Adjust the flag accordingly
+   Callback = function(Value)
+       if Value then
+           getgenv().AutoStats = true
+           repeat
+               wait(0.1)
+               spawn(function()
+                   game:GetService("ReplicatedStorage").Events.UpgradeAbility:InvokeServer(selectedstat)
+               end)
+           until not AutoStats
+       else
+           spawn(function()
+               getgenv().AutoStats = false
+           end)
+       end
+   end,
+})
+
+
 
 
 -- Side Tab----------------------------------------------------------------------------------------------------
