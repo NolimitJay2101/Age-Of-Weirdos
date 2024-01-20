@@ -272,6 +272,51 @@ local Toggle = MainTab:CreateToggle({
     end,
 })
 
+local Toggle = MainTab:CreateToggle({
+    Name = "Super Rapid Punch",
+    CurrentValue = false,
+    Flag = "SuperRapidPunchToggle",
+    Callback = function(state)
+        if state then
+            getgenv().superrapid = true
+            local UserInputService = game:GetService("UserInputService")
+            local function onInputEnded(inputObject, gameProcessedEvent)
+                if gameProcessedEvent then
+                    return
+                end
+                if superrapid then
+                    if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
+                        for _ = 1, 10 do
+                            spawn(function()
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            end)
+                        end
+                        for _ = 1, 10 do
+                            spawn(function()
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            end)
+                        end
+                        for _ = 1, 10 do
+                            spawn(function()
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            end)
+                        end
+                        for _ = 1, 10 do
+                            spawn(function()
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            end)
+                        end
+                    end
+                end
+            end
+            UserInputService.InputEnded:Connect(onInputEnded)
+        else
+            spawn(function()
+                getgenv().superrapid = false
+            end)
+        end
+    end,
+})
 
 -- Side Tab----------------------------------------------------------------------------------------------------
 local SideTab = Window:CreateTab("Side", nil) 
