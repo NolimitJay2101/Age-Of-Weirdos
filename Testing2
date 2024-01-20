@@ -43,7 +43,7 @@ Rayfield:Notify({
 
 -- Main Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local MainTab = Window:CreateTab("Main", nil) 
-local MainSection = Tab:CreateSection("Main")
+local MainSection = MainTab:CreateSection("Main")
 
 FarmTab:CreateButton({
     Name = "Inf Yield",
@@ -55,7 +55,7 @@ FarmTab:CreateButton({
 -- Autofarm Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local FarmTab = Window:CreateTab("Farm", nil)
-local FarmSection = Tab:CreateSection("Farm")
+local FarmSection = FarmTab:CreateSection("Farm")
 
 local OrbFarmToggle = FarmTab:CreateToggle({
     Name = "Orb Farm",
