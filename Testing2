@@ -42,49 +42,36 @@ Rayfield:Notify({
 })
 
 -- Main Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local SettingTab = Window:CreateTab("Setting", nil) 
-local SettingSection = SettingTab:CreateSection("Setting")
-
--- Rejoin Button
-SettingTab:CreateButton({
-    Name = "Rejoin",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
-    end,
-})
-
--- Autofarm Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-local FarmTab = Window:CreateTab("Farm", nil)
-local FarmSection = FarmTab:CreateSection("Farm")
+local FarmTab = Window:CreateTab("Farm", nil) 
+local FarmSection = Tab:CreateSection("Farm")
 
 local OrbFarmToggle = FarmTab:CreateToggle({
-    Name = "Orb Farm",
-    CurrentValue = false,
-    Flag = "OrbFarmToggle",
-    Callback = function(Value)
-        if Value then
-            -- Toggle is turned ON
-            getgenv().OrbFarm = true;
- 
-            local function orbFarmLogic()
-                local Playerhead = game.Players.LocalPlayer.Character.Head;
-                for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
-                    if v.Name == "TouchInterest" and v.Parent then
-                        firetouchinterest(Playerhead, v.Parent, 0);
-                    end
-                end
-            end
- 
-            spawn(function()
-                while getgenv().OrbFarm do
-                    wait(15);
-                    pcall(orbFarmLogic);
-                end
-            end);
-        else
-            -- Toggle is turned OFF
-            getgenv().OrbFarm = false;
-        end
-    end,
- })
+   Name = "Orb Farm",
+   CurrentValue = false,
+   Flag = "OrbFarmToggle",
+   Callback = function(Value)
+       if Value then
+           -- Toggle is turned ON
+           getgenv().OrbFarm = true;
+
+           local function orbFarmLogic()
+               local Playerhead = game.Players.LocalPlayer.Character.Head;
+               for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                   if v.Name == "TouchInterest" and v.Parent then
+                       firetouchinterest(Playerhead, v.Parent, 0);
+                   end
+               end
+           end
+
+           spawn(function()
+               while getgenv().OrbFarm do
+                   wait(15);
+                   pcall(orbFarmLogic);
+               end
+           end);
+       else
+           -- Toggle is turned OFF
+           getgenv().OrbFarm = false;
+       end
+   end,
+})
