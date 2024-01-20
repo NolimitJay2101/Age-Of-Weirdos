@@ -42,13 +42,14 @@ Rayfield:Notify({
 })
 
 -- Main Tab --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local MainTab = Window:CreateTab("Main", nil) 
-local MainSection = MainTab:CreateSection("Main")
+local SettingTab = Window:CreateTab("Setting", nil) 
+local SettingSection = SettingTab:CreateSection("Setting")
 
-FarmTab:CreateButton({
-    Name = "Inf Yield",
+-- Rejoin Button
+SettingTab:CreateButton({
+    Name = "Rejoin",
     Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+        loadstring(game:HttpGet("https://pastebin.com/raw/1gtVMUz3"))()
     end,
 })
 
