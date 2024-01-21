@@ -1,5 +1,7 @@
+-- Load Rayfield library
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Create main window
 local Window = Rayfield:CreateWindow({
     Name = "Age of Weirdos",
     LoadingTitle = "Age of Weirdos",
@@ -26,6 +28,7 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
+-- Notify the user
 Rayfield:Notify({
     Title = "Welcome To Age Of Weirdos",
     Content = "Worst Game",
@@ -41,81 +44,62 @@ Rayfield:Notify({
     },
 })
 
+-- Create Farm tab
 local FarmTab = Window:CreateTab("Farm") -- Title, Image
 
-
---AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- AutoFarm Section
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
+-- Orb Farm Toggle
 local OrbFarmToggle = FarmTab:CreateToggle({
     Name = "Orb Farm",
     CurrentValue = false,
     Flag = "OrbFarmToggle",
     Callback = function(Value)
+        getgenv().OrbFarm = Value
         if Value then
-            -- Toggle is turned ON
-            getgenv().OrbFarm = true;
- 
-            local function orbFarmLogic()
-                local Playerhead = game.Players.LocalPlayer.Character.Head;
-                for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
-                    if v.Name == "TouchInterest" and v.Parent then
-                        firetouchinterest(Playerhead, v.Parent, 0);
-                    end
-                end
-            end
- 
             spawn(function()
                 while getgenv().OrbFarm do
-                    wait(15);
-                    pcall(orbFarmLogic);
+                    wait(15)
+                    for _, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                        if v.Name == "TouchInterest" and v.Parent then
+                            firetouchinterest(game.Players.LocalPlayer.Character.Head, v.Parent, 0)
+                        end
+                    end
                 end
-            end);
-        else
-            -- Toggle is turned OFF
-            getgenv().OrbFarm = false;
+            end)
         end
     end,
- })
+})
 
--- NPC Farm
--- Civilian Toggle
-local Toggle = FarmTab:CreateToggle({
+-- Civilian Farm Toggle
+local CivilianX, CivilianY, CivilianZ; -- Variables to store player position
+local CivilianToggle = FarmTab:CreateToggle({
     Name = "Civilian Farm",
     CurrentValue = false,
     Flag = "CivilianToggle",
     Callback = function(Value)
+        getgenv().Civilian = Value
         if Value then
-            -- Toggle is turned ON
-            getgenv().Civilian = true;
-
-            local CivilianX, CivilianY, CivilianZ;
-
             spawn(function()
                 while getgenv().Civilian do
-                    wait(0.2);
-                    pcall(function()
-                        for _, v in pairs(game.Workspace:GetChildren()) do
-                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1);
-                            if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                local playerCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
-                                playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2);
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame;
-                            end
+                    wait(0.2)
+                    for _, v in pairs(game.Workspace:GetChildren()) do
+                        if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            local playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame
                         end
-                    end);
+                    end
                 end
-            end);
+            end)
 
             -- Save current position
-            CivilianX = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X;
-            CivilianY = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y;
-            CivilianZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z;
+            local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+            CivilianX, CivilianY, CivilianZ = rootPart.Position.X, rootPart.Position.Y, rootPart.Position.Z
         else
-            -- Toggle is turned OFF
-            getgenv().Civilian = false;
-            wait(0.2);
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ);
+            wait(0.2)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ)
         end
     end,
 })
