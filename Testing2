@@ -80,7 +80,7 @@ local OrbFarmToggle = FarmTab:CreateToggle({
 
 -- NPC Farm
 -- Civilian Toggle
-local Toggle = FarnTab:CreateToggle({
+local Toggle = FarmTab:CreateToggle({
     Name = "Civilian Farm",
     CurrentValue = false,
     Flag = "CivilianToggle",
