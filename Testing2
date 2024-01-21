@@ -41,5 +41,5 @@ Rayfield:Notify({
     },
 })
 
-local MainTab = Window:CreateTab("Main", nil) -- Title, Image
+local MainTab = Window:CreateTab("Main") -- Title, Image
 local MainSection = MainTab:CreateSection("Main")
