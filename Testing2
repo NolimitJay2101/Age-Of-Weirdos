@@ -56,7 +56,7 @@ local Toggle = MainTab:CreateToggle({
                 if gameProcessedEvent then
                     return
                 end
-                if rapid then
+                if getgenv().rapid then  -- Use getgenv().rapid instead of just rapid
                     if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
                         spawn(function()
                             for _ = 1, 10 do
@@ -73,4 +73,4 @@ local Toggle = MainTab:CreateToggle({
             end)
         end
     end,
- }) 
+})
