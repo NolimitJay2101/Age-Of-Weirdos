@@ -1,36 +1,30 @@
--- Get the Workspace
-local workspace = game:GetService("Workspace")
+local OrbFarmToggle = MainTab:CreateToggle({
+   Name = "Orb Farm",
+   CurrentValue = false,
+   Flag = "OrbFarmToggle",
+   Callback = function(Value)
+       if Value then
+           -- Toggle is turned ON
+           getgenv().OrbFarm = true;
 
--- Specify the name of the child you want to find
-local childNameToFind = "ExperienceOrbs"
+           local function orbFarmLogic()
+               local Playerhead = game.Players.LocalPlayer.Character.Head;
+               for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                   if v.Name == "TouchInterest" and v.Parent then
+                       firetouchinterest(Playerhead, v.Parent, 0);
+                   end
+               end
+           end
 
--- Delay in seconds between iterations
-local delayBetweenIterations = 1  -- Adjust as needed
-
-while true do
-    -- Get the specified child
-    local experienceOrbs = workspace:FindFirstChild(childNameToFind)
-
-    -- Check if ExperienceOrbs exists in Workspace
-    if experienceOrbs then
-        -- Assuming player is defined in your script
-        local player = game.Players.LocalPlayer
-
-        -- Check if the player's character and HumanoidRootPart exist
-        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local humanoidRootPart = player.Character.HumanoidRootPart
-
-            -- Iterate through the children of ExperienceOrbs and fire touch interest
-            for _, child in pairs(experienceOrbs:GetChildren()) do
-                firetouchinterest(humanoidRootPart, child, 0)
-            end
-        else
-            warn("Player or HumanoidRootPart not found.")
-        end
-    else
-        warn("ExperienceOrbs not found in Workspace.")
-    end
-
-    -- Delay before the next iteration
-    wait(delayBetweenIterations)
-end
+           spawn(function()
+               while getgenv().OrbFarm do
+                   wait(15);
+                   pcall(orbFarmLogic);
+               end
+           end);
+       else
+           -- Toggle is turned OFF
+           getgenv().OrbFarm = false;
+       end
+   end,
+})
