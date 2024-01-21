@@ -47,63 +47,33 @@ local FarmTab = Window:CreateTab("Farm") -- Title, Image
 --AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
-local AutoOrbsToggle = FarmTab:CreateToggle({
-    Name = "Autofarm Orbs",
-    Flag = "AutoOrbsToggle", -- Add a flag for identification if needed
-    Callback = function(state)
-        if state then
+local OrbFarmToggle = FarmTab:CreateToggle({
+    Name = "Orb Farm",
+    CurrentValue = false,
+    Flag = "OrbFarmToggle",
+    Callback = function(Value)
+        if Value then
+            -- Toggle is turned ON
             getgenv().OrbFarm = true;
+ 
             local function orbFarmLogic()
                 local Playerhead = game.Players.LocalPlayer.Character.Head;
-                for _, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
                     if v.Name == "TouchInterest" and v.Parent then
                         firetouchinterest(Playerhead, v.Parent, 0);
                     end
                 end
             end
-
+ 
             spawn(function()
-                repeat
-                    pcall(orbFarmLogic);
+                while getgenv().OrbFarm do
                     wait(15);
-                until not getgenv().OrbFarm
-            end);
-        else
-            spawn(function()
-                getgenv().OrbFarm = false;
-            end);
-        end
-    end
-})
-
- -- Civilian Farm Toggle
-local CivilianX, CivilianY, CivilianZ; -- Variables to store player position
-local CivilianToggle = FarmTab:CreateToggle({
-    Name = "Civilian Farm",
-    CurrentValue = false,
-    Flag = "CivilianToggle",
-    Callback = function(Value)
-        getgenv().Civilian = Value
-        if Value then
-            spawn(function()
-                while getgenv().Civilian do
-                    wait(0.2)
-                    for _, v in pairs(game.Workspace:GetChildren()) do
-                        if v:IsA("Model") and v.Name == "Civilian" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                            game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
-                            local playerCFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCFrame
-                        end
-                    end
+                    pcall(orbFarmLogic);
                 end
-            end)
-
-            -- Save current position
-            local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
-            CivilianX, CivilianY, CivilianZ = rootPart.Position.X, rootPart.Position.Y, rootPart.Position.Z
+            end);
         else
-            wait(0.2)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(CivilianX, CivilianY, CivilianZ)
+            -- Toggle is turned OFF
+            getgenv().OrbFarm = false;
         end
     end,
-})
+ })
