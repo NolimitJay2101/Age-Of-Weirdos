@@ -43,3 +43,34 @@ Rayfield:Notify({
 
 local MainTab = Window:CreateTab("Main") -- Title, Image
 local MainSection = MainTab:CreateSection("Main")
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Rapid Punch",
+    CurrentValue = false,
+    Flag = "RapidPunchToggle",
+    Callback = function(state)
+        if state then
+            getgenv().rapid = true
+            local UserInputService = game:GetService("UserInputService")
+            local function onInputEnded(inputObject, gameProcessedEvent)
+                if gameProcessedEvent then
+                    return
+                end
+                if rapid then
+                    if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
+                        spawn(function()
+                            for _ = 1, 10 do
+                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
+                            end
+                        end)
+                    end
+                end
+            end
+            UserInputService.InputEnded:Connect(onInputEnded)
+        else
+            spawn(function()
+                getgenv().rapid = false
+            end)
+        end
+    end,
+ }) 
