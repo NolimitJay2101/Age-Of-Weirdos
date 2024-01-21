@@ -41,36 +41,39 @@ Rayfield:Notify({
     },
 })
 
-local MainTab = Window:CreateTab("Main") -- Title, Image
-local MainSection = MainTab:CreateSection("Main")
+local FarmTab = Window:CreateTab("Farm") -- Title, Image
 
-local Toggle = MainTab:CreateToggle({
-    Name = "Rapid Punch",
+
+--AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local MainSection = FarmTab:CreateSection("AutoFarm")
+
+local OrbFarmToggle = FarmTab:CreateToggle({
+    Name = "Orb Farm",
     CurrentValue = false,
-    Flag = "RapidPunchToggle",
-    Callback = function(state)
-        if state then
-            getgenv().rapid = true
-            local UserInputService = game:GetService("UserInputService")
-            local function onInputEnded(inputObject, gameProcessedEvent)
-                if gameProcessedEvent then
-                    return
-                end
-                if getgenv().rapid then  -- Use getgenv().rapid instead of just rapid
-                    if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-                        spawn(function()
-                            for _ = 1, 10 do
-                                game:GetService("ReplicatedStorage").Events.Punch:FireServer(0, 0.1, 1)
-                            end
-                        end)
+    Flag = "OrbFarmToggle",
+    Callback = function(Value)
+        if Value then
+            -- Toggle is turned ON
+            getgenv().OrbFarm = true;
+ 
+            local function orbFarmLogic()
+                local Playerhead = game.Players.LocalPlayer.Character.Head;
+                for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+                    if v.Name == "TouchInterest" and v.Parent then
+                        firetouchinterest(Playerhead, v.Parent, 0);
                     end
                 end
             end
-            UserInputService.InputEnded:Connect(onInputEnded)
-        else
+ 
             spawn(function()
-                getgenv().rapid = false
-            end)
+                while getgenv().OrbFarm do
+                    wait(15);
+                    pcall(orbFarmLogic);
+                end
+            end);
+        else
+            -- Toggle is turned OFF
+            getgenv().OrbFarm = false;
         end
     end,
-})
+ })
