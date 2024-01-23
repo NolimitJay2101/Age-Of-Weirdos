@@ -1,0 +1,38 @@
+local TelekinesisSpaceFlingToggle = PlayerMenuTab:CreateToggle({
+    Name = "Telekinesis Space Fling",
+    CurrentValue = false,
+    Flag = "TelekinesisSpaceFlingToggle",
+    Callback = function(state)
+        if state then
+            getgenv().telesauras = true
+            while telesauras do
+                wait(0.2)
+                spawn(function()
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
+                end)
+            end
+        else
+            spawn(function()
+                getgenv().telesauras = false
+            end)
+        end
+    end,
+})
+
+local Toggle = PlayerMenuTab:CreateToggle({
+    Name = "Antitelekinesis",
+    CurrentValue = false,
+    Flag = "AntitelekinesisToggle",
+    Callback = function(Value)
+        getgenv().localtele = Value;
+        if Value then
+            spawn(function()
+                while getgenv().localtele do
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players.LocalPlayer.Character);
+                    wait();
+                end
+            end);
+        end
+    end,
+})
