@@ -1,4 +1,4 @@
-local Toggle = MainTab:CreateToggle({
+local Toggle = PlayerMenuTab:CreateToggle({
     Name = "Rapid Punch",
     CurrentValue = false,
     Flag = "RapidPunchToggle",
@@ -29,7 +29,7 @@ local Toggle = MainTab:CreateToggle({
     end,
  }) 
 
-local Toggle = MainTab:CreateToggle({
+local Toggle = PlayerMenuTab:CreateToggle({
     Name = "Rapid Heavy Punch",
     CurrentValue = false,
     Flag = "RapidHeavyPunchToggle",
@@ -60,7 +60,7 @@ local Toggle = MainTab:CreateToggle({
     end,
 })
 
-local Toggle = MainTab:CreateToggle({
+local Toggle = PlayerMenuTab:CreateToggle({
     Name = "Super Rapid Punch",
     CurrentValue = false,
     Flag = "SuperRapidPunchToggle",
