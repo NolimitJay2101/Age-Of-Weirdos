@@ -1,14 +1,7 @@
-local AutoStatsTab = Window:CreateTab("AutoStats") -- Title, Image
-
--- Function to get the AutoStats list
 local function GetAutoStatsList()
     return {"vitality", "healing", "strength", "energy", "flight", "speed", "climbing", "swinging", "fireball", "frost", "lightning", "power", "telekinesis", "shield", "laserVision", "metalSkin"}
 end
 
--- Create AutoStats Section
-local AutoStatSection = AutoStatsTab:CreateSection("AutoStat")
-
--- Create AutoStats Dropdown
 local AutoStatsDropdown = AutoStatsTab:CreateDropdown({
     Name = "Select AutoStat",
     Options = GetAutoStatsList(),
@@ -21,7 +14,6 @@ local AutoStatsDropdown = AutoStatsTab:CreateDropdown({
     end,
 })
 
--- Create AutoStats Toggle
 local AutoStatsToggle = AutoStatsTab:CreateToggle({
     Name = "Toggle AutoStats",
     CurrentValue = false,
