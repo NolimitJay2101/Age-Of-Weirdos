@@ -1,0 +1,45 @@
+local AutoStatsTab = Window:CreateTab("AutoStats") -- Title, Image
+
+-- Function to get the AutoStats list
+local function GetAutoStatsList()
+    return {"vitality", "healing", "strength", "energy", "flight", "speed", "climbing", "swinging", "fireball", "frost", "lightning", "power", "telekinesis", "shield", "laserVision", "metalSkin"}
+end
+
+-- Create AutoStats Section
+local AutoStatSection = AutoStatsTab:CreateSection("AutoStat")
+
+-- Create AutoStats Dropdown
+local AutoStatsDropdown = AutoStatsTab:CreateDropdown({
+    Name = "Select AutoStat",
+    Options = GetAutoStatsList(),
+    CurrentOption = {GetAutoStatsList()[1]}, -- Set the default option if needed
+    MultipleOptions = false,
+    Flag = "AutoStatsDropdown",
+    Callback = function(selectedOption)
+        selectedstat = selectedOption[1]
+        -- Additional code if needed when the selected option changes
+    end,
+})
+
+-- Create AutoStats Toggle
+local AutoStatsToggle = AutoStatsTab:CreateToggle({
+    Name = "Toggle AutoStats",
+    CurrentValue = false,
+    Flag = "AutoStatsToggle", -- Make sure each element has a different flag for configuration saving
+    Callback = function(state)
+        if state then
+            getgenv().AutoStats = true;
+            while getgenv().AutoStats do
+                wait(0.1);
+                spawn(function()
+                    -- Modify the line below to call your specific function or service
+                    game:GetService("ReplicatedStorage").Events.UpgradeAbility:InvokeServer(selectedstat);
+                end);
+            end
+        else
+            spawn(function()
+                getgenv().AutoStats = false;
+            end);
+        end
+    end,
+})
