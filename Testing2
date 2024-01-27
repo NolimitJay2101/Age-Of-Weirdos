@@ -559,71 +559,88 @@ local FlingToggle = TargetTab:CreateToggle({
     Name = "Fling",
     CurrentValue = false,
     Flag = "FlingToggle",
-    Callback = function(state)
-        if state then
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer -- Define player variable
+
+        if Value then
             getgenv().fling = true;
 
-            local player = game.Players.LocalPlayer
+            -- Initialize LastPosition
+            local LastPosition = player.Character.HumanoidRootPart.CFrame
 
-            local function getRoot(character)
-                if character:FindFirstChild("HumanoidRootPart") then
-                    return character.HumanoidRootPart
-                else
-                    return nil
+            -- Other initialization code
+            local varX = player.Character.HumanoidRootPart.Position.X;
+            local varY = player.Character.HumanoidRootPart.Position.Y;
+            local varZ = player.Character.HumanoidRootPart.Position.Z;
+            wait();
+            getgenv().Flingvel = true;
+            for _, child in pairs(player.Character:GetDescendants()) do
+                if child:IsA("BasePart") then
+                    child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5);
+                end
+            end
+            local bambam = Instance.new("BodyAngularVelocity");
+            bambam.Parent = player.Character.HumanoidRootPart;
+            bambam.AngularVelocity = Vector3.new(0, 1000, 0);
+            bambam.MaxTorque = Vector3.new(0, math.huge, 0);
+            local Char = player.Character:GetChildren();
+            for i, v in next, Char do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false;
+                    v.Massless = true;
+                    v.Velocity = Vector3.new(0, 0, 0);
                 end
             end
 
-            local LastPosition
-            local function breakvelocity()
-                local playerChar = player.Character
-                if not playerChar or not getRoot(playerChar) then
-                    return
-                end
-
-                for _, v in pairs(getRoot(playerChar):GetChildren()) do
-                    if v:IsA("BodyVelocity") or v:IsA("BodyAngularVelocity") then
-                        v:Destroy()
+            -- Fling loop
+            while getgenv().fling do
+                task.wait();
+                spawn(function()
+                    pcall(function()
+                        for i, v in pairs(game.Workspace:GetChildren()) do
+                            if ((v.Name == _G.tplayer) and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                                player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0);
+                            end
+                        end
+                    end);
+                end);
+                spawn(function()
+                    local PrimaryPart = player.Character.PrimaryPart;
+                    if ((PrimaryPart.AssemblyLinearVelocity.Magnitude > 250) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 250)) then
+                        PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0);
+                        PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0);
+                        PrimaryPart.CFrame = LastPosition;
+                    elseif ((PrimaryPart.AssemblyLinearVelocity.Magnitude < 50) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 50)) then
+                        LastPosition = PrimaryPart.CFrame;
                     end
-                end
-            end
-
-            local function flingLoop()
-                while getgenv().fling do
-                    task.wait()
-
-                    local targetPlayer = game.Players[_G.tplayer]
-                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local targetRootPart = targetPlayer.Character.HumanoidRootPart
-                        player.Character.HumanoidRootPart.CFrame = targetRootPart.CFrame * CFrame.new(0, 0, 3) -- Adjust the offset as needed
+                end);
+                spawn(function()
+                    if (getgenv().fling == false) then
+                        player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ);
                     end
-                end
+                end);
             end
-
-            flingLoop()
 
         else
-            getgenv().fling = false
+            getgenv().fling = false;
+            wait(0.1);
+            getgenv().fling = true;
 
-            local playerChar = player.Character
-            if not playerChar or not getRoot(playerChar) then
-                return
+            local playerChar = player.Character;
+            if (not playerChar or not getRoot(playerChar)) then
+                return;
             end
-
-            -- Destroy BodyAngularVelocity instances
-            for _, v in pairs(getRoot(playerChar):GetChildren()) do
-                if v:IsA("BodyAngularVelocity") then
-                    v:Destroy()
+            for i, v in pairs(getRoot(playerChar):GetChildren()) do
+                if (v.ClassName == "BodyAngularVelocity") then
+                    v:Destroy();
                 end
             end
-
-            -- Reset physical properties for parts in the character
             for _, child in pairs(playerChar:GetDescendants()) do
-                if child:IsA("BasePart") or child:IsA("MeshPart") then
-                    child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+                if ((child.ClassName == "Part") or (child.ClassName == "MeshPart")) then
+                    child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5);
                 end
             end
-
-            breakvelocity()
+            breakvelocity();
         end
     end
 })
