@@ -560,20 +560,16 @@ local FlingToggle = TargetTab:CreateToggle({
     CurrentValue = false,
     Flag = "FlingToggle",
     Callback = function(Value)
-        local player = game.Players.LocalPlayer
-
         if Value then
             getgenv().fling = true;
 
-            -- Initialization code
-            local LastPosition
-            local varX, varY, varZ
+            local player = game.Players.LocalPlayer
+            local varX = player.Character.HumanoidRootPart.Position.X
+            local varY = player.Character.HumanoidRootPart.Position.Y
+            local varZ = player.Character.HumanoidRootPart.Position.Z
 
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                LastPosition = player.Character.HumanoidRootPart.CFrame
-                local rootPart = player.Character.HumanoidRootPart.Position
-                varX, varY, varZ = rootPart.X, rootPart.Y, rootPart.Z
-            end
+            -- Initialization code
+            local LastPosition = player.Character.HumanoidRootPart.CFrame
 
             -- Setting up fling loop
             spawn(function()
@@ -611,10 +607,12 @@ local FlingToggle = TargetTab:CreateToggle({
 
         else
             getgenv().fling = false
-            
+
+            local player = game.Players.LocalPlayer
+
             -- Cleanup code
-            if LastPosition and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = LastPosition -- Reset to original position
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 0, 0) -- Reset to original position
                 player.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0) -- Reset linear velocity
                 player.Character.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0) -- Reset angular velocity
             end
