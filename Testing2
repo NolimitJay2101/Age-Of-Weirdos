@@ -564,79 +564,69 @@ local FlingToggle = TargetTab:CreateToggle({
             getgenv().fling = true;
 
             local player = game.Players.LocalPlayer
-            local varX, varY, varZ
 
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local rootPart = player.Character.HumanoidRootPart.Position
-                varX, varY, varZ = rootPart.X, rootPart.Y, rootPart.Z
-            end
-
-            wait()
-
-            getgenv().Flingvel = true;
-
-            -- Set custom physical properties for all parts in the character
-            for _, child in pairs(player.Character:GetDescendants()) do
-                if child:IsA("BasePart") then
-                    child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
+            local function getRoot(character)
+                if character:FindFirstChild("HumanoidRootPart") then
+                    return character.HumanoidRootPart
+                else
+                    return nil
                 end
             end
 
-            local bambam = Instance.new("BodyAngularVelocity")
-            bambam.Parent = player.Character.HumanoidRootPart
-            bambam.AngularVelocity = Vector3.new(0, 1000, 0)
-            bambam.MaxTorque = Vector3.new(0, math.huge, 0)
+            local LastPosition
+            local function breakvelocity()
+                local playerChar = player.Character
+                if not playerChar or not getRoot(playerChar) then
+                    return
+                end
 
-            local char = player.Character:GetChildren()
-
-            -- Disable collisions for all parts in the character
-            for _, v in next, char do
-                if v:IsA("BasePart") then
-                    v.CanCollide = false
-                    v.Massless = true
-                    v.Velocity = Vector3.new(0, 0, 0)
+                for _, v in pairs(getRoot(playerChar):GetChildren()) do
+                    if v:IsA("BodyVelocity") or v:IsA("BodyAngularVelocity") then
+                        v:Destroy()
+                    end
                 end
             end
 
-            while getgenv().fling do
-                task.wait()
+            local function flingLoop()
+                while getgenv().fling do
+                    task.wait()
 
-                -- Your fling logic here using the selected player (_G.tplayer)
-                -- ...
+                    -- Your fling logic here using the selected player (_G.tplayer)
+                    -- ...
 
-                spawn(function()
-                    pcall(function()
-                        for _, v in pairs(game.Workspace:GetChildren()) do
-                            if v.Name == _G.tplayer and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0)
+                    spawn(function()
+                        pcall(function()
+                            for _, v in pairs(game.Workspace:GetChildren()) do
+                                if v.Name == _G.tplayer and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                    player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0)
+                                end
                             end
+                        end)
+                    end)
+
+                    spawn(function()
+                        local PrimaryPart = player.Character.PrimaryPart
+                        if PrimaryPart and ((PrimaryPart.AssemblyLinearVelocity.Magnitude > 250) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 250)) then
+                            PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                            PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                            PrimaryPart.CFrame = LastPosition
+                        elseif PrimaryPart and ((PrimaryPart.AssemblyLinearVelocity.Magnitude < 50) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 50)) then
+                            LastPosition = PrimaryPart.CFrame
                         end
                     end)
-                end)
 
-                spawn(function()
-                    local PrimaryPart = player.Character.PrimaryPart
-                    if PrimaryPart and ((PrimaryPart.AssemblyLinearVelocity.Magnitude > 250) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 250)) then
-                        PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
-                        PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                        PrimaryPart.CFrame = LastPosition
-                    elseif PrimaryPart and ((PrimaryPart.AssemblyLinearVelocity.Magnitude < 50) or (PrimaryPart.AssemblyAngularVelocity.Magnitude > 50)) then
-                        LastPosition = PrimaryPart.CFrame
-                    end
-                end)
-
-                spawn(function()
-                    if not getgenv().fling then
-                        player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ)
-                    end
-                end)
+                    spawn(function()
+                        if not getgenv().fling then
+                            player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ)
+                        end
+                    end)
+                end
             end
+
+            flingLoop()
+
         else
-            spawn(function()
-                getgenv().fling = false
-                wait(0.1)
-                getgenv().fling = true
-            end)
+            getgenv().fling = false
 
             local playerChar = player.Character
             if not playerChar or not getRoot(playerChar) then
