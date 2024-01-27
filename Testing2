@@ -498,61 +498,92 @@ local KillPlayerToggle = TargetTab:CreateToggle({
     end,
 })
 
-local LoopGotoToggle = TargetTab:CreateToggle({
-    Name = "LoopGoto",
+local FlingToggle = TargetTab:CreateToggle({
+    Name = "Fling",
     CurrentValue = false,
-    Flag = "LoopGotoToggle",
-    Callback = function(state) -- Corrected parameter name from 'Value' to 'state'
-        if state then
-            getgenv().loopgoto = true;
-            local player = game.Players.LocalPlayer
-            local varX, varY, varZ
+    Flag = "FlingToggle",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
 
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local rootPart = player.Character.HumanoidRootPart.Position
-                varX, varY, varZ = rootPart.X, rootPart.Y, rootPart.Z
+        if Value then
+            getgenv().fling = true
+
+            -- Initialization code
+            local varX = player.Character.HumanoidRootPart.Position.X
+            local varY = player.Character.HumanoidRootPart.Position.Y
+            local varZ = player.Character.HumanoidRootPart.Position.Z
+
+            local p1 = player.Character.HumanoidRootPart.CFrame
+
+            getgenv().Flingvel = true
+
+            for _, child in pairs(player.Character:GetDescendants()) do
+                if child:IsA("BasePart") then
+                    child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
+                end
             end
 
-            wait();
+            local bambam = Instance.new("BodyAngularVelocity")
+            bambam.Parent = player.Character.HumanoidRootPart
+            bambam.AngularVelocity = Vector3.new(0, 1000, 0)
+            bambam.MaxTorque = Vector3.new(0, math.huge, 0)
 
-            getgenv().breakv = true;
-
-            spawn(function()
-                while getgenv().breakv do
-                    wait(1);
-                    breakvelocity();
+            for _, v in ipairs(player.Character:GetChildren()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                    v.Massless = true
+                    v.Velocity = Vector3.new(0, 0, 0)
                 end
-            end);
+            end
 
-            while getgenv().loopgoto do
-                task.wait();
-                spawn(function()
-                    pcall(function()
-                        for _, v in pairs(game.Workspace:GetChildren()) do
-                            if v.Name == _G.tplayer and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3);
-                            end
-                        end
-                    end);
-                end);
-                
-                spawn(function()
-                    if not getgenv().loopgoto then
-                        player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ);
+            -- Fling loop
+            while getgenv().fling do
+                task.wait()
+
+                for _, v in pairs(game.Workspace:GetChildren()) do
+                    if v.Name == _G.tplayer and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                        player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0)
                     end
-                end);
+                end
+
+                local PrimaryPart = player.Character.PrimaryPart
+                if PrimaryPart then
+                    local magnitude = PrimaryPart.AssemblyLinearVelocity.Magnitude
+                    if magnitude > 250 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 250 then
+                        PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                        PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                        PrimaryPart.CFrame = p1
+                    elseif magnitude < 50 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 50 then
+                        p1 = PrimaryPart.CFrame
+                    end
+                end
+
+                if not getgenv().fling then
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ)
+                end
             end
         else
-            spawn(function()
-                getgenv().breakv = false;
-                wait(0.2);
-                getgenv().loopgoto = false;
-                wait(0.1);
-                getgenv().loopgoto = true;
-                breakvelocity();
-            end);
+            getgenv().fling = false
+
+            -- Cleanup code
+            wait(0.1)
+            getgenv().fling = true
+
+            local playerChar = player.Character
+            if playerChar and getRoot(playerChar) then
+                for _, v in pairs(getRoot(playerChar):GetChildren()) do
+                    if v:IsA("BodyAngularVelocity") then
+                        v:Destroy()
+                    end
+                end
+                for _, child in pairs(playerChar:GetDescendants()) do
+                    if child:IsA("Part") or child:IsA("MeshPart") then
+                        child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+                    end
+                end
+            end
         end
-    end,
+    end
 })
 
 local FlingToggle = TargetTab:CreateToggle({
