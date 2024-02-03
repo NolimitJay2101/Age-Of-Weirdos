@@ -411,6 +411,22 @@ local PlayerDropdown = TargetTab:CreateDropdown({
     end,
 })
 
+local SearchBox = TargetTab:CreateTextBox({
+    Name = "Search Player",
+    Text = "",
+    Placeholder = "Type player name...",
+    Callback = function(searchText)
+        -- Clear previous options
+        PlayerDropdown:ClearOptions()
+        local playerList = GetPlayerList()
+        for _, playerName in ipairs(playerList) do
+            if string.match(playerName:lower(), searchText:lower()) then
+                PlayerDropdown:AddOption(playerName)
+            end
+        end
+    end
+})
+
 --Functions
 local GotoPlayerButton = TargetTab:CreateButton({
     Name = "Goto Player",
