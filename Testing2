@@ -411,7 +411,7 @@ local PlayerDropdown = TargetTab:CreateDropdown({
     end,
 })
 
-local SearchBox = TargetTab:CreateInput({
+local SearchInput = TargetTab:CreateInput({
     Name = "Search Player",
     PlaceholderText = "Type player name...",
     RemoveTextAfterFocusLost = false,
