@@ -411,10 +411,10 @@ local PlayerDropdown = TargetTab:CreateDropdown({
     end,
 })
 
-local SearchBox = TargetTab:CreateTextBox({
+local SearchBox = TargetTab:CreateInput({
     Name = "Search Player",
-    Text = "",
-    Placeholder = "Type player name...",
+    PlaceholderText = "Type player name...",
+    RemoveTextAfterFocusLost = false,
     Callback = function(searchText)
         -- Clear previous options
         PlayerDropdown:ClearOptions()
