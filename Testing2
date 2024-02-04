@@ -388,32 +388,32 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- Name Esp Button
 -- Function to get the player list
 local function GetPlayerList()
     local playerList = {}
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        table.insert(playerList, player.Name)
+        table.insert(playerList, player) -- Insert player object instead of just the name
     end
     return playerList
 end
 
---Player Dropdown
-local PlayerDropdown = TargetTab:CreateDropdown({
+-- Player Dropdown
+local PlayerDropdown = TargetSection:CreateDropdown({
     Name = "Select Player",
     Options = GetPlayerList(),
     CurrentOption = {GetPlayerList()[1]}, -- Set the default player
     MultipleOptions = false,
     Flag = "PlayerDropdown",
     Callback = function(selectedPlayer)
-        print("Selected Player: " .. selectedPlayer[1])
-        _G.tplayer = selectedPlayer[1]
+        print("Selected Player: " .. selectedPlayer[1].Name) -- Access player name
+        _G.tplayer = selectedPlayer[1].Name
         getgenv().confirm = true
     end,
+    Search = true, -- Enable search feature
 })
 
 --Functions
-local GotoPlayerButton = TargetTab:CreateButton({
+local GotoPlayerButton = TargetSection:CreateButton({
     Name = "Goto Player",
     Callback = function()
         spawn(function()
@@ -424,7 +424,7 @@ local GotoPlayerButton = TargetTab:CreateButton({
     end,
 })
 
-local SpectateToggle = TargetTab:CreateToggle({
+local SpectateToggle = TargetSection:CreateToggle({
     Name = "Spectate",
     CurrentValue = false,
     Flag = "SpectateToggle",
@@ -450,7 +450,7 @@ local SpectateToggle = TargetTab:CreateToggle({
     end
 })
 
-local KillPlayerToggle = TargetTab:CreateToggle({
+local KillPlayerToggle = TargetSection:CreateToggle({
     Name = "Kill Player",
     CurrentValue = false,
     Flag = "KillPlayerToggle", -- Make sure each element has a different flag for configuration saving
@@ -499,7 +499,7 @@ local KillPlayerToggle = TargetTab:CreateToggle({
     end,
 })
 
-local FlingToggle = TargetTab:CreateToggle({
+local FlingToggle = TargetSection:CreateToggle({
     Name = "Fling",
     CurrentValue = false,
     Flag = "FlingToggle",
@@ -587,7 +587,7 @@ local FlingToggle = TargetTab:CreateToggle({
     end
 })
 
-local LaserToggle = TargetTab:CreateToggle({
+local LaserToggle = TargetSection:CreateToggle({
     Name = "Laser",
     CurrentValue = false,
     Flag = "LaserToggle",
@@ -625,7 +625,7 @@ local LaserToggle = TargetTab:CreateToggle({
     end
 })
 
-local GiveOrbsToggle = TargetTab:CreateToggle({
+local GiveOrbsToggle = TargetSection:CreateToggle({
     Name = "Give Orbs",
     CurrentValue = false,
     Flag = "GiveOrbsToggle",
@@ -655,7 +655,7 @@ local GiveOrbsToggle = TargetTab:CreateToggle({
     end
 })
 
-local DisableTelekinesisToggle = TargetTab:CreateToggle({
+local DisableTelekinesisToggle = TargetSection:CreateToggle({
     Name = "Disable Telekinesis",
     CurrentValue = false,
     Flag = "DisableTelekinesisToggle",
