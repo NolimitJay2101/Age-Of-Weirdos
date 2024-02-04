@@ -43,7 +43,6 @@ Rayfield:Notify({
 
 local FarmTab = Window:CreateTab("Farm") -- Title, Image
 
-
 --AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
@@ -185,11 +184,138 @@ local ThugToggle = FarmTab:CreateToggle({
     end,
 })
 
---AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Laser Civilian Farm Toggle
+local LaserCivilianFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Civilian Farm",
+    CurrentValue = false,
+    Flag = "LaserCivilianFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserC = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserC = true;
+                while LaserC and part do
+                    wait();
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Civilian") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserC = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+-- Laser Police Farm Toggle
+local LaserPoliceFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Police Farm",
+    CurrentValue = false,
+    Flag = "LaserPoliceFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserV = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserV = true;
+                while LaserV and part do
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Police") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                    wait();
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserV = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+-- Laser Thug Farm Toggle
+local LaserThugFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Thug Farm",
+    CurrentValue = false,
+    Flag = "LaserThugFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserH = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserH = true;
+                while LaserH and part do
+                    wait();
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Thug") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserH = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+--Player Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local PlayerMenuTab = Window:CreateTab("Player Menu") -- Title, Image
-local PlayerMenuSection = PlayerMenuTab:CreateSection("Punch")
+local PlayerMenuSection = PlayerMenuTab:CreateSection("Spawn")
+
+--Spawn
+local SpawnPointToggle = PlayerMenuTab:CreateToggle({
+    Name = "Spawn Point",
+    CurrentValue = false,
+    Flag = "SpawnPointToggle",
+    Callback = function(state)
+        if state then
+            getgenv().Deathcheck = true
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            if not character or not character:IsDescendantOf(game.Workspace) then
+                character = player.CharacterAdded:Wait()
+            end
+            local varX = character.UpperTorso.Position.X
+            local varY = character.UpperTorso.Position.Y
+            local varZ = character.UpperTorso.Position.Z
+            spawn(function()
+                while getgenv().Deathcheck do
+                    wait(0.5) -- Adjust the wait time as needed
+                    character = player.Character
+                    if character and character:FindFirstChild("Humanoid") and character.Humanoid.Health == 0 then
+                        wait(6.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(varX, varY, varZ)))
+                    end
+                end
+            end)
+        else
+            getgenv().Deathcheck = false
+        end
+    end,
+})
 
 --Punch
+local PlayerMenuSection = PlayerMenuTab:CreateSection("Punch")
+
 local Toggle = PlayerMenuTab:CreateToggle({
     Name = "Rapid Punch",
     CurrentValue = false,
@@ -219,7 +345,7 @@ local Toggle = PlayerMenuTab:CreateToggle({
             end)
         end
     end,
- }) 
+}) 
 
 local Toggle = PlayerMenuTab:CreateToggle({
     Name = "Rapid Heavy Punch",
@@ -350,7 +476,7 @@ local function GetAutoStatsList()
 end
 
 -- Define a variable to store the number of points to put in each stat
-local pointsPerStat = 1 -- Change this value as needed
+local pointsPerStat = 30 -- Change this value as needed
 
 -- Dropdown for selecting auto stats
 local AutoStatsDropdown = AutoStatsTab:CreateDropdown({
@@ -414,6 +540,20 @@ local PlayerDropdown = TargetTab:CreateDropdown({
         _G.tplayer = selectedPlayer[1]
         getgenv().confirm = true
     end,
+})
+
+local RefreshDropdownButton = TargetTab:CreateButton({
+    Name = "Refresh Dropdown",
+    Callback = function()
+        spawn(function()
+            local updatedPlayerList = GetPlayerList()
+            print("Updated Player List:")
+            for _, player in ipairs(updatedPlayerList) do
+                print(player)
+            end
+            PlayerDropdown:SetOptions(updatedPlayerList)
+        end)
+    end
 })
 
 --Functions
@@ -681,7 +821,7 @@ local DisableTelekinesisToggle = TargetTab:CreateToggle({
 			end);
 		end
     end,
- })
+})
 
 --Teleport Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local TeleportTab = Window:CreateTab("Teleport")
