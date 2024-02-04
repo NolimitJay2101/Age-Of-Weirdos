@@ -185,6 +185,38 @@ local ThugToggle = FarmTab:CreateToggle({
     end,
 })
 
+-- Civilian Farm Toggle
+local LaserCivilianFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Civilian Farm",
+    CurrentValue = false,
+    Flag = "LaserCivilianFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserC = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserC = true;
+                while LaserC and part do
+                    wait();
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Civilian") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserC = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+
 --AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local PlayerMenuTab = Window:CreateTab("Player Menu") -- Title, Image
 local PlayerMenuSection = PlayerMenuTab:CreateSection("Punch")
