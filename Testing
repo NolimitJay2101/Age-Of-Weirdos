@@ -518,17 +518,19 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- Name Esp Button
--- Function to get the player list
-local function GetPlayerList()
-    local playerList = {}
-    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        table.insert(playerList, player.Name)
-    end
-    return playerList
+-- This function fetches an updated list of players in the game
+    function GetPlayerList()
+        local playerList = {} -- Initialize an empty list
+        -- Get all players currently in the game
+        local players = game:GetService("Players"):GetPlayers()
+        -- Add each player's name to the list
+        for _, player in ipairs(players) do
+            table.insert(playerList, player.Name)
+        end
+        return playerList
 end
 
---Player Dropdown
+-- Create the dropdown
 local PlayerDropdown = TargetTab:CreateDropdown({
     Name = "Select Player",
     Options = GetPlayerList(),
@@ -542,17 +544,13 @@ local PlayerDropdown = TargetTab:CreateDropdown({
     end,
 })
 
+-- Create the refresh button
 local RefreshDropdownButton = TargetTab:CreateButton({
     Name = "Refresh Dropdown",
     Callback = function()
-        spawn(function()
-            local updatedPlayerList = GetPlayerList()
-            print("Updated Player List:")
-            for _, player in ipairs(updatedPlayerList) do
-                print(player)
-            end
-            PlayerDropdown:SetOptions(updatedPlayerList)
-        end)
+        local updatedPlayerList = GetPlayerList()
+        PlayerDropdown.Options = updatedPlayerList
+        PlayerDropdown:Refresh()
     end
 })
 
