@@ -387,7 +387,6 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- Name Esp Button
 -- Function to get the player list
 local function GetPlayerList()
     local playerList = {}
@@ -395,6 +394,17 @@ local function GetPlayerList()
         table.insert(playerList, player.Name)
     end
     return playerList
+end
+
+-- Function to filter player list based on search query
+local function FilterPlayerList(query)
+    local filteredList = {}
+    for _, playerName in ipairs(GetPlayerList()) do
+        if string.find(playerName:lower(), query:lower(), 1, true) then
+            table.insert(filteredList, playerName)
+        end
+    end
+    return filteredList
 end
 
 --Player Dropdown
@@ -411,30 +421,22 @@ local PlayerDropdown = TargetTab:CreateDropdown({
     end,
 })
 
--- Create input box for searching players
-local SearchInput = TargetTab:CreateInput({
-    Name = "Search Player",
-    PlaceholderText = "Type player name...",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(searchText)
-        -- Clear previous options
-        PlayerDropdown:ClearOptions()
-        local playerList = GetPlayerList()
-        for _, playerName in ipairs(playerList) do
-            if string.match(playerName:lower(), searchText:lower()) then
-                PlayerDropdown:AddOption(playerName)
-            end
-        end
+-- Function to update dropdown options based on search query
+local function UpdateDropdownOptions(query)
+    PlayerDropdown:SetOptions(FilterPlayerList(query))
+end
+
+-- Add a TextBox for search functionality
+local SearchTextBox = TargetTab:CreateTextBox({
+    Name = "Search Players",
+    Placeholder = "Type to search...",
+    Callback = function(query)
+        UpdateDropdownOptions(query)
     end,
-    InputBeganCallback = function(input)
-        if input.KeyCode == Enum.KeyCode.Return then
-            local searchString = SearchInput:GetValue():lower()
-            for _, playerName in ipairs(GetPlayerList()) do
-                if string.find(playerName:lower(), searchString, 1, true) == 1 then
-                    SearchInput:SetValue(playerName)
-                    break
-                end
-            end
+    SubmitCallback = function(query)
+        local filteredList = FilterPlayerList(query)
+        if #filteredList > 0 then
+            PlayerDropdown:SetOption({filteredList[1]})
         end
     end
 })
@@ -704,7 +706,7 @@ local DisableTelekinesisToggle = TargetTab:CreateToggle({
 			end);
 		end
     end,
- })
+})
 
 --Teleport Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local TeleportTab = Window:CreateTab("Teleport")
