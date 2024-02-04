@@ -387,15 +387,6 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- Function to get the player list
-local function GetPlayerList()
-    local playerList = {}
-    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        table.insert(playerList, player.Name)
-    end
-    return playerList
-end
-
 -- Function to filter player list based on search query
 local function FilterPlayerList(query)
     local filteredList = {}
@@ -707,6 +698,7 @@ local DisableTelekinesisToggle = TargetTab:CreateToggle({
 		end
     end,
 })
+
 
 --Teleport Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local TeleportTab = Window:CreateTab("Teleport")
