@@ -546,8 +546,12 @@ local RefreshDropdownButton = TargetTab:CreateButton({
     Name = "Refresh Dropdown",
     Callback = function()
         spawn(function()
-            GetList()
-            PlayerDropdown:SetOptions(GetPlayerList()) -- Assuming GetPlayerList() returns the updated player list
+            local updatedPlayerList = GetPlayerList()
+            print("Updated Player List:")
+            for _, player in ipairs(updatedPlayerList) do
+                print(player)
+            end
+            PlayerDropdown:SetOptions(updatedPlayerList)
         end)
     end
 })
