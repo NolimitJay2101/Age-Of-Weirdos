@@ -547,7 +547,7 @@ local RefreshDropdownButton = TargetTab:CreateButton({
     Callback = function()
         spawn(function()
             GetList()
-            slcplr:Refresh(dropdown)
+            PlayerDropdown:SetOptions(GetPlayerList()) -- Assuming GetPlayerList() returns the updated player list
         end)
     end
 })
