@@ -350,7 +350,7 @@ local function GetAutoStatsList()
 end
 
 -- Define a variable to store the number of points to put in each stat
-local pointsPerStat = 1 -- Change this value as needed
+local pointsPerStat = 30 -- Change this value as needed
 
 -- Dropdown for selecting auto stats
 local AutoStatsDropdown = AutoStatsTab:CreateDropdown({
