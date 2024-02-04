@@ -1,3 +1,6 @@
+local KeyBindsTab = Window:CreateTab("KeyBinds")
+local KeyBindsSection = KeyBindsTab:CreateSection("KeyBind")
+
 local MetalSkinKeybind = KeyBindsTab:CreateKeybind({
     Name = "MetalSkin",
     CurrentKeybind = "R",
