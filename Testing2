@@ -519,8 +519,8 @@ local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
 -- This function fetches an updated list of players in the game
-function GetPlayerList()
-    local playerList = {} -- Initialize an empty list
+    function GetPlayerList()
+        local playerList = {} -- Initialize an empty list
         -- Get all players currently in the game
         local players = game:GetService("Players"):GetPlayers()
         -- Add each player's name to the list
@@ -528,10 +528,10 @@ function GetPlayerList()
             table.insert(playerList, player.Name)
         end
         return playerList
-end
-
--- Create the dropdown
-local PlayerDropdown = TargetTab:CreateDropdown({
+    end
+    
+    -- Create the dropdown
+    local PlayerDropdown = TargetTab:CreateDropdown({
         Name = "Select Player",
         Options = {}, -- Initialize with an empty list
         CurrentOption = {GetPlayerList()[1]}, -- Set the default player
@@ -542,10 +542,10 @@ local PlayerDropdown = TargetTab:CreateDropdown({
             _G.tplayer = selectedPlayer[1]
             getgenv().confirm = true
         end,
-})
-
--- Create the refresh button
-local RefreshDropdownButton = TargetTab:CreateButton({
+    })
+    
+    -- Create the refresh button
+    local RefreshDropdownButton = TargetTab:CreateButton({
         Name = "Refresh Dropdown",
         Callback = function()
             local updatedPlayerList = GetPlayerList()
@@ -553,12 +553,12 @@ local RefreshDropdownButton = TargetTab:CreateButton({
             PlayerDropdown:SetOptions(updatedPlayerList) -- Update the dropdown options
             PlayerDropdown:Refresh() -- Refresh the dropdown UI
         end
-})
-
--- Update the dropdown options initially
+    })
+    
+    -- Update the dropdown options initially
     PlayerDropdown.Options = GetPlayerList()
     PlayerDropdown:SetOptions(GetPlayerList())
-    
+
 --Functions
 local GotoPlayerButton = TargetTab:CreateButton({
     Name = "Goto Player",
