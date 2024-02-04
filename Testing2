@@ -282,36 +282,39 @@ local PlayerMenuTab = Window:CreateTab("Player Menu") -- Title, Image
 local PlayerMenuSection = PlayerMenuTab:CreateSection("Spawn")
 
 --Spawn
+local spawnPoint = nil
+
 local SpawnPointToggle = PlayerMenuTab:CreateToggle({
-    Name = "Spawn Point",
+    Name = "Spawn",
     CurrentValue = false,
     Flag = "SpawnPointToggle",
-    Callback = function(state)
-        if state then
-            getgenv().Deathcheck = true
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            if not character or not character:IsDescendantOf(game.Workspace) then
-                character = player.CharacterAdded:Wait()
-            end
-            local varX = character.UpperTorso.Position.X
-            local varY = character.UpperTorso.Position.Y
-            local varZ = character.UpperTorso.Position.Z
-            spawn(function()
-                while getgenv().Deathcheck do
-                    wait(0.5) -- Adjust the wait time as needed
-                    character = player.Character
-                    if character and character:FindFirstChild("Humanoid") and character.Humanoid.Health == 0 then
-                        wait(6.5)
-                        character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(varX, varY, varZ)))
-                    end
-                end
-            end)
+    Callback = function(Value)
+        if Value then
+            print("Spawn point set to current position")
+            spawnPoint = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
         else
-            getgenv().Deathcheck = false
+            print("Spawn point reset")
+            spawnPoint = nil
         end
     end,
 })
+
+-- Function to teleport player to spawn point upon death
+local function OnCharacterAdded(character)
+    character.Humanoid.Died:Connect(function()
+        if spawnPoint then
+            character:SetPrimaryPartCFrame(CFrame.new(spawnPoint))
+        else
+            warn("No spawn point set")
+        end
+    end)
+end
+
+game.Players.LocalPlayer.CharacterAdded:Connect(OnCharacterAdded)
+
+-- Example usage of the toggle to set spawn point
+Toggle.Callback(true) -- Set spawn point to current position
+
 
 --Punch
 local PlayerMenuSection = PlayerMenuTab:CreateSection("Punch")
