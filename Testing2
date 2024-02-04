@@ -518,46 +518,29 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- This function fetches an updated list of players in the game
-    function GetPlayerList()
-        local playerList = {} -- Initialize an empty list
-        -- Get all players currently in the game
-        local players = game:GetService("Players"):GetPlayers()
-        -- Add each player's name to the list
-        for _, player in ipairs(players) do
-            table.insert(playerList, player.Name)
-        end
-        return playerList
+-- Name Esp Button
+-- Function to get the player list
+local function GetPlayerList()
+    local playerList = {}
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        table.insert(playerList, player.Name)
     end
-    
-    -- Create the dropdown
-    local PlayerDropdown = TargetTab:CreateDropdown({
-        Name = "Select Player",
-        Options = {}, -- Initialize with an empty list
-        CurrentOption = {GetPlayerList()[1]}, -- Set the default player
-        MultipleOptions = false,
-        Flag = "PlayerDropdown",
-        Callback = function(selectedPlayer)
-            print("Selected Player: " .. selectedPlayer[1])
-            _G.tplayer = selectedPlayer[1]
-            getgenv().confirm = true
-        end,
-    })
-    
-    -- Create the refresh button
-    local RefreshDropdownButton = TargetTab:CreateButton({
-        Name = "Refresh Dropdown",
-        Callback = function()
-            local updatedPlayerList = GetPlayerList()
-            PlayerDropdown.Options = updatedPlayerList
-            PlayerDropdown:SetOptions(updatedPlayerList) -- Update the dropdown options
-            PlayerDropdown:Refresh() -- Refresh the dropdown UI
-        end
-    })
-    
-    -- Update the dropdown options initially
-    PlayerDropdown.Options = GetPlayerList()
-    PlayerDropdown:SetOptions(GetPlayerList())
+    return playerList
+end
+
+--Player Dropdown
+local PlayerDropdown = TargetTab:CreateDropdown({
+    Name = "Select Player",
+    Options = GetPlayerList(),
+    CurrentOption = {GetPlayerList()[1]}, -- Set the default player
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selectedPlayer)
+        print("Selected Player: " .. selectedPlayer[1])
+        _G.tplayer = selectedPlayer[1]
+        getgenv().confirm = true
+    end,
+})
 
 --Functions
 local GotoPlayerButton = TargetTab:CreateButton({
@@ -644,6 +627,58 @@ local KillPlayerToggle = TargetTab:CreateToggle({
             end)
         end
     end,
+})
+
+local LoopGotoToggle = TargetTab:CreateToggle({
+    Name = "Loop Goto Player",
+    CurrentValue = false,
+    Flag = "LoopGotoToggleFlag",
+    Callback = function(state)
+        if state then
+            getgenv().loopgoto = true
+
+            local player = game.Players.LocalPlayer
+            local varX = player.Character.HumanoidRootPart.Position.X
+            local varY = player.Character.HumanoidRootPart.Position.Y
+            local varZ = player.Character.HumanoidRootPart.Position.Z
+
+            local p1 = player.Character.HumanoidRootPart
+            local pos = p1.CFrame
+            getgenv().breakv = true
+            spawn(function()
+                while breakv do
+                    wait(1)
+                    breakvelocity()
+                end
+            end)
+            while loopgoto do
+                task.wait()
+                spawn(function()
+                    pcall(function()
+                        for i, v in pairs(game.Workspace:GetChildren()) do
+                            if v.Name == _G.tplayer and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+                            end
+                        end
+                    end)
+                end)
+                spawn(function()
+                    if not loopgoto then
+                        player.Character.HumanoidRootPart.CFrame = CFrame.new(varX, varY, varZ)
+                    end
+                end)
+            end
+        else
+            spawn(function()
+                getgenv().breakv = false
+                wait(0.2)
+                getgenv().loopgoto = false
+                wait(0.1)
+                getgenv().loopgoto = true
+                breakvelocity()
+            end)
+        end
+    end
 })
 
 local FlingToggle = TargetTab:CreateToggle({
