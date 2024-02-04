@@ -47,6 +47,7 @@ local FarmTab = Window:CreateTab("Farm") -- Title, Image
 --AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
+-- Orb Farm Toggle
 local AutoOrbsToggle = FarmTab:CreateToggle({
     Name = "Autofarm Orbs",
     Flag = "AutoOrbsToggle", -- Add a flag for identification if needed
@@ -185,7 +186,7 @@ local ThugToggle = FarmTab:CreateToggle({
     end,
 })
 
---AutoFarm Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--Player Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local PlayerMenuTab = Window:CreateTab("Player Menu") -- Title, Image
 local PlayerMenuSection = PlayerMenuTab:CreateSection("Punch")
 
@@ -387,42 +388,28 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
-local function ToggleSpectate(state)
-    if state then
-        getgenv().watch = true
-        spawn(function()
-            while getgenv().watch do
-                local viewing = game.Players[_G.tplayer]
-                if viewing and viewing.Character then
-                    workspace.CurrentCamera.CameraSubject = viewing.Character
-                end
-                wait(0.1)
-            end
-        end)
-    else
-        getgenv().watch = false
-        local localPlayer = game.Players.LocalPlayer
-        if localPlayer and localPlayer.Character then
-            workspace.CurrentCamera.CameraSubject = localPlayer.Character
-        end
+-- Name Esp Button
+-- Function to get the player list
+local function GetPlayerList()
+    local playerList = {}
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        table.insert(playerList, player.Name)
     end
+    return playerList
 end
 
-local SpectateToggle = TargetTab:CreateToggle({
-    Name = "Spectate Player",
-    CurrentValue = false,
-    Flag = "SpectateToggle",
-    Callback = ToggleSpectate
-})
-
-local TargetTextBox = TargetTab:CreateTextBox({
-    Name = "Target Player",
-    Placeholder = "Player Name",
-    ClearTextOnFocus = false,
-    Text = "",
-    Callback = function(text)
-        _G.tplayer = text
-    end
+--Player Dropdown
+local PlayerDropdown = TargetTab:CreateDropdown({
+    Name = "Select Player",
+    Options = GetPlayerList(),
+    CurrentOption = {GetPlayerList()[1]}, -- Set the default player
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selectedPlayer)
+        print("Selected Player: " .. selectedPlayer[1])
+        _G.tplayer = selectedPlayer[1]
+        getgenv().confirm = true
+    end,
 })
 
 --Functions
@@ -691,7 +678,6 @@ local DisableTelekinesisToggle = TargetTab:CreateToggle({
 		end
     end,
 })
-
 
 --Teleport Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local TeleportTab = Window:CreateTab("Teleport")
