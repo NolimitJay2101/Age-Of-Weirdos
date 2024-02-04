@@ -1,4 +1,4 @@
- -- Civilian Farm Toggle
+-- Civilian Farm Toggle
 local CivilianX, CivilianY, CivilianZ; -- Variables to store player position
 local CivilianToggle = FarmTab:CreateToggle({
     Name = "Civilian Farm",
@@ -103,6 +103,99 @@ local ThugToggle = FarmTab:CreateToggle({
             getgenv().Thug = false
             wait(0.2)
             humanoidRootPart.CFrame = CFrame.new(ThugPosition)
+        end
+    end,
+})
+
+-- Laser Civilian Farm Toggle
+local LaserCivilianFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Civilian Farm",
+    CurrentValue = false,
+    Flag = "LaserCivilianFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserC = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserC = true;
+                while LaserC and part do
+                    wait();
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Civilian") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserC = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+-- Laser Police Farm Toggle
+local LaserPoliceFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Police Farm",
+    CurrentValue = false,
+    Flag = "LaserPoliceFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserV = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserV = true;
+                while LaserV and part do
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Police") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                    wait();
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserV = false;
+            end);
+            breakvelocity();
+        end
+    end,
+})
+
+-- Laser Thug Farm Toggle
+local LaserThugFarmToggle = FarmTab:CreateToggle({
+    Name = "Laser Thug Farm",
+    CurrentValue = false,
+    Flag = "LaserThugFarmToggle",
+    Callback = function(state)
+        if state then
+            getgenv().LaserH = true;
+            coroutine.resume(coroutine.create(function()
+                local event = game:GetService("ReplicatedStorage").Events.ToggleLaserVision;
+                local part = event:InvokeServer(true);
+                getgenv().LaserH = true;
+                while LaserH and part do
+                    wait();
+                    for i, v in pairs(game.Workspace:GetChildren()) do
+                        if ((v.ClassName == "Model") and (v.Name == "Thug") and v:FindFirstChild("Humanoid") and (v.Humanoid.Health > 0)) then
+                            part.Position = v.HumanoidRootPart.Position;
+                        end
+                    end
+                end
+                event:InvokeServer(false);
+            end));
+        else
+            spawn(function()
+                getgenv().LaserH = false;
+            end);
+            breakvelocity();
         end
     end,
 })
