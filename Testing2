@@ -387,48 +387,41 @@ local AutoStatsToggle = AutoStatsTab:CreateToggle({
 local TargetTab = Window:CreateTab("Target")
 local TargetSection = TargetTab:CreateSection("Players")
 
--- Function to filter player list based on search query
-local function FilterPlayerList(query)
-    local filteredList = {}
-    for _, playerName in ipairs(GetPlayerList()) do
-        if string.find(playerName:lower(), query:lower(), 1, true) then
-            table.insert(filteredList, playerName)
+local function ToggleSpectate(state)
+    if state then
+        getgenv().watch = true
+        spawn(function()
+            while getgenv().watch do
+                local viewing = game.Players[_G.tplayer]
+                if viewing and viewing.Character then
+                    workspace.CurrentCamera.CameraSubject = viewing.Character
+                end
+                wait(0.1)
+            end
+        end)
+    else
+        getgenv().watch = false
+        local localPlayer = game.Players.LocalPlayer
+        if localPlayer and localPlayer.Character then
+            workspace.CurrentCamera.CameraSubject = localPlayer.Character
         end
     end
-    return filteredList
 end
 
---Player Dropdown
-local PlayerDropdown = TargetTab:CreateDropdown({
-    Name = "Select Player",
-    Options = GetPlayerList(),
-    CurrentOption = {GetPlayerList()[1]}, -- Set the default player
-    MultipleOptions = false,
-    Flag = "PlayerDropdown",
-    Callback = function(selectedPlayer)
-        print("Selected Player: " .. selectedPlayer[1])
-        _G.tplayer = selectedPlayer[1]
-        getgenv().confirm = true
-    end,
+local SpectateToggle = TargetTab:CreateToggle({
+    Name = "Spectate Player",
+    CurrentValue = false,
+    Flag = "SpectateToggle",
+    Callback = ToggleSpectate
 })
 
--- Function to update dropdown options based on search query
-local function UpdateDropdownOptions(query)
-    PlayerDropdown:SetOptions(FilterPlayerList(query))
-end
-
--- Add a TextBox for search functionality
-local SearchTextBox = TargetTab:CreateTextBox({
-    Name = "Search Players",
-    Placeholder = "Type to search...",
-    Callback = function(query)
-        UpdateDropdownOptions(query)
-    end,
-    SubmitCallback = function(query)
-        local filteredList = FilterPlayerList(query)
-        if #filteredList > 0 then
-            PlayerDropdown:SetOption({filteredList[1]})
-        end
+local TargetTextBox = TargetTab:CreateTextBox({
+    Name = "Target Player",
+    Placeholder = "Player Name",
+    ClearTextOnFocus = false,
+    Text = "",
+    Callback = function(text)
+        _G.tplayer = text
     end
 })
 
