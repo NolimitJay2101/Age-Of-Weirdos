@@ -998,9 +998,9 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
     Name = "Carry Player",
     CurrentKeybind = "H",
     HoldToInteract = false,
-    Flag = "CarryPlayerKeybind", 
+    Flag = "CarryPlayerKeybind", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Keybind)
-        if Keybind then
+        if _G.CToggle == false then
             spawn(function()
                 getNearPlayer(99)
                 wait()
@@ -1009,12 +1009,12 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
                 while CarryP do
                     wait()
                     spawn(function()
-                        for _, v in pairs(plrlist) do
+                        for i, v in pairs(plrlist) do
                             if v ~= player then
-                                local Xt = player.Character.HumanoidRootPart.Position.X
-                                local Yt = player.Character.HumanoidRootPart.Position.Y
-                                local Zt = player.Character.HumanoidRootPart.Position.Z
-                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt + 8, Zt + 5)
+                                Xt = player.Character.HumanoidRootPart.Position.X
+                                Yt = player.Character.HumanoidRootPart.Position.Y
+                                Zt = player.Character.HumanoidRootPart.Position.Z
+                                game.Workspace[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt + 8, Zt + 5)
                             end
                         end
                     end)
@@ -1049,22 +1049,21 @@ local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
     HoldToInteract = false,
     Flag = "TelekinesisKillKeybind", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Keybind)
-    	spawn(function()
-            getNearPlayer(99);
+        spawn(function()
+            getNearPlayer(99)
             for i, v in pairs(plrlist) do
-                if (v == player) then
-                else
+                if v ~= player then
                     spawn(function()
-                        v.Head.Neck:Destroy();
-                        plrlist = {};
-                        wait(0.2);
+                        v.Head.Neck:Destroy()
+                        plrlist = {}
+                        wait(0.2)
                         spawn(function()
-                            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character);
-                        end);
-                    end);
+                            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
+                        end)
+                    end)
                 end
             end
-        end);
+        end)
     end
 })
 
