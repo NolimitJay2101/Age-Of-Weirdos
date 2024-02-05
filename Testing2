@@ -994,91 +994,40 @@ local MetalSkinKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Carry Player",
-    CurrentKeybind = "H",
-    HoldToInteract = false,
-    Flag = "CarryPlayerKeybind", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-    Callback = function(Keybind)
-        if _G.CToggle == false then
-            spawn(function()
-                getNearPlayer(99)
-                wait()
-                _G.CToggle = true
-                getgenv().CarryP = true
-                while CarryP do
-                    wait()
-                    spawn(function()
-                        for i, v in pairs(plrlist) do
-                            if v ~= player then
-                                Xt = player.Character.HumanoidRootPart.Position.X
-                                Yt = player.Character.HumanoidRootPart.Position.Y
-                                Zt = player.Character.HumanoidRootPart.Position.Z
-                                game.Workspace[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt + 8, Zt + 5)
-                            end
-                        end
-                    end)
-                end
-            end)
-        else
-            spawn(function()
-                _G.CToggle = false
-                plrlist = {}
-                getgenv().CarryP = false
-            end)
-        end
-    end
-})
-
-local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
+local Keybind = Tab:CreateKeybind({
     Name = "Telekinesis Lock",
     CurrentKeybind = "T",
     HoldToInteract = false,
-    Flag = "TelekinesisLockKeybind",
+    Flag = "TelekinesisLockKeybind", -- Unique flag for configuration saving
     Callback = function(Keybind)
-        local LookVector = game.Workspace.Camera.CFrame.LookVector
-        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(LookVector, true)
-        wait(0.1)  -- Adjust the delay based on your needs
-        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(LookVector, false)
+       spawn(function()
+          local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
+          game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(LookVector, true)
+          game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(LookVector, false)
+       end)
     end,
 })
 
-local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis kill",
+local Keybind2 = Tab:CreateKeybind({
+    Name = "Telekinesis Kill",
     CurrentKeybind = "G",
     HoldToInteract = false,
-    Flag = "TelekinesisKillKeybind", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "TelekinesisKillKeybind", -- Unique flag for configuration saving
     Callback = function(Keybind)
-        spawn(function()
-            getNearPlayer(99)
-            for i, v in pairs(plrlist) do
-                if v ~= player then
-                    spawn(function()
-                        v.Head.Neck:Destroy()
-                        plrlist = {}
-                        wait(0.2)
-                        spawn(function()
-                            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
-                        end)
-                    end)
-                end
-            end
-        end)
-    end
-})
-
-local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Release Telekinesis",
-    CurrentKeybind = "C", -- Keep it as a string if that's what your framework expects
-    HoldToInteract = false,
-    Flag = "ReleaseTelekinesisKeybind",
-    Callback = function()
-        plrlist = {};
-        local Players = game:GetService("Players");
-        for i, player in pairs(Players:GetPlayers()) do
-            spawn(function()
-                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[player.Name].Character);
-            end);
-        end
+       spawn(function()
+          getNearPlayer(99)
+          for i, v in pairs(plrlist) do
+             if v ~= player then
+                spawn(function()
+                   v.Head.Neck:Destroy()
+                   plrlist = {}
+                   wait(0.2)
+                   spawn(function()
+                      game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
+                   end)
+                end)
+             end
+          end
+       end)
     end,
 })
