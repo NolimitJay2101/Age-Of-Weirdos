@@ -1008,26 +1008,44 @@ local Keybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind2 = KeyBindsTab:CreateKeybind({
+local function getNearPlayer(maxDistance)
+    pcall(function()
+        if player and player.Character then
+            local playerLocation = player.Character.HumanoidRootPart.Position
+            for _, v in pairs(game.Players:GetPlayers()) do
+                if v.Character and v.Character.Health > 0 then
+                    local location = v.Character.HumanoidRootPart.Position
+                    if (location - playerLocation).Magnitude <= maxDistance and v.Character.Health > 0 then
+                        if v ~= player then
+                            local teleexist = game:GetService("Workspace")[v.Name].HumanoidRootPart
+                            if not teleexist:FindFirstChild("telekinesisPosition") then
+                                plrnum = plrnum + 1
+                                table.insert(plrlist, v.Character)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local TelekinesisKillKeybind = KSection:CreateKeybind({
     Name = "Telekinesis Kill",
-    CurrentKeybind = "G",
-    HoldToInteract = false,
-    Flag = "TelekinesisKillKeybind", -- Unique flag for configuration saving
+    CurrentKeybind = Enum.KeyCode.G,
+    Flag = "TelekinesisKill",
     Callback = function(Keybind)
-       spawn(function()
-          getNearPlayer(99)
-          for i, v in pairs(plrlist) do
-             if v ~= player then
-                spawn(function()
-                   v.Head.Neck:Destroy()
-                   plrlist = {}
-                   wait(0.2)
-                   spawn(function()
-                      game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
-                   end)
-                end)
-             end
-          end
-       end)
-    end,
+        if Keybind then
+            getNearPlayer(99)
+            for i, v in pairs(plrlist) do
+                if v ~= player then
+                    spawn(function()
+                        v.Head.Neck:Destroy()
+                        wait(0.2)
+                        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
+                    end)
+                end
+            end
+        end
+    end
 })
