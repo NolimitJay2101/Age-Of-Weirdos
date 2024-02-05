@@ -994,7 +994,7 @@ local MetalSkinKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind = Tab:CreateKeybind({
+local Keybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Lock",
     CurrentKeybind = "T",
     HoldToInteract = false,
@@ -1008,7 +1008,7 @@ local Keybind = Tab:CreateKeybind({
     end,
 })
 
-local Keybind2 = Tab:CreateKeybind({
+local Keybind2 = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Kill",
     CurrentKeybind = "G",
     HoldToInteract = false,
