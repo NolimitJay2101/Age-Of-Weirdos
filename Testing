@@ -1008,6 +1008,14 @@ local Keybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
+_G.CToggle = false
+_G.metalskin = false
+_G.LOCALPLAYER = game.Players.LocalPlayer.Name
+_G.bring = false
+local player = game.Players.LocalPlayer
+local plrlist = {}
+local plrnum = 0
+
 local function getNearPlayer(maxDistance)
     pcall(function()
         if player and player.Character then
@@ -1030,9 +1038,10 @@ local function getNearPlayer(maxDistance)
     end)
 end
 
-local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
+local Keybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Kill",
     CurrentKeybind = Enum.KeyCode.G,
+    HoldToInteract = false,
     Flag = "TelekinesisKill",
     Callback = function(Keybind)
         if Keybind then
