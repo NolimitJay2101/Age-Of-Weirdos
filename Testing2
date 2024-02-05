@@ -1030,7 +1030,7 @@ local function getNearPlayer(maxDistance)
     end)
 end
 
-local TelekinesisKillKeybind = KSection:CreateKeybind({
+local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Kill",
     CurrentKeybind = Enum.KeyCode.G,
     Flag = "TelekinesisKill",
