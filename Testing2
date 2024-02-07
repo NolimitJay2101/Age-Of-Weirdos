@@ -1009,48 +1009,43 @@ local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
 })
 
 local Keybind = Tab:CreateKeybind({
-    Name = "Telekinesis Kill",
-    CurrentKeybind = "X",
-    HoldToInteract = false,
-    Flag = "Keybind1",
+    Name = "Telekinesis Kill", -- Name of the keybind
+    CurrentKeybind = "X", -- The key to trigger the keybind (you can change it to any key)
+    HoldToInteract = false, -- Whether the keybind should be held to activate (false means it's activated on press)
+    Flag = "Keybind1", -- Identifier for the configuration file
     Callback = function(Keybind)
-        telekinesisKill()
+        -- Spawn a new asynchronous thread to execute the following code
+        spawn(function()
+            -- Retrieve a list of nearby players within 99 studs
+            getNearPlayer(99)
+            
+            -- Iterate over each player in the list
+            for _, v in pairs(plrlist) do
+                -- Check if the current player is not the local player
+                if v ~= player then
+                    -- Spawn a new asynchronous thread to execute the following code
+                    spawn(function()
+                        -- Destroy the Neck part of the player's character
+                        v.Head.Neck:Destroy()
+                        
+                        -- Clear the list of nearby players
+                        plrlist = {}
+                        
+                        -- Wait for 0.2 seconds
+                        wait(0.2)
+                        
+                        -- Spawn a new asynchronous thread to execute the following code
+                        spawn(function()
+                            -- Invoke a server-side function named ToggleTelekinesis with certain arguments
+                            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
+                        end)
+                    end)
+                end
+            end
+        end)
     end,
 })
 
--- Function to get nearby players
-local function getNearbyPlayers(maxDistance)
-    local nearbyPlayers = {}
-    local playerPosition = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-    if playerPosition then
-        for _, player in ipairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.Humanoid.Health > 0 then
-                local distance = (player.Character.HumanoidRootPart.Position - playerPosition).Magnitude
-                if distance <= maxDistance then
-                    table.insert(nearbyPlayers, player)
-                end
-            end
-        end
-    end
-    return nearbyPlayers
-end
-
--- Telekinesis kill function
-local function telekinesisKill()
-    local nearbyPlayers = getNearbyPlayers(99)
-    for _, player in ipairs(nearbyPlayers) do
-        local success, err = pcall(function()
-            -- Implement your logic to eliminate the player here
-            -- For example, you might destroy their character's neck
-            if player.Character and player.Character:FindFirstChild("Humanoid") then
-                player.Character.Humanoid:TakeDamage(player.Character.Humanoid.MaxHealth)
-            end
-        end)
-        if not success then
-            warn("Error occurred while eliminating player:", err)
-        end
-    end
-end
 
 
 local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
