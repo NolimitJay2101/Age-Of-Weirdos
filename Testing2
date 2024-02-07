@@ -1008,6 +1008,22 @@ local Keybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
+local function GetPlayerList()
+    local playerList = {}
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        table.insert(playerList, player.Name)
+    end
+    return playerList
+end
+
+_G.CToggle = false
+_G.metalskin = false
+_G.LOCALPLAYER = game.Players.LocalPlayer.Name
+_G.bring = false
+local player = game.Players.LocalPlayer
+local plrlist = {}
+local plrnum = 0
+
 local function getNearPlayer(maxDistance)
     pcall(function()
         if player and player.Character then
@@ -1032,7 +1048,8 @@ end
 
 local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Kill",
-    CurrentKeybind = Enum.KeyCode.G,
+    CurrentKeybind = "G",
+    HoldToInteract = false,
     Flag = "TelekinesisKill",
     Callback = function(Keybind)
         if Keybind then
@@ -1048,4 +1065,20 @@ local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
             end
         end
     end
+})
+
+local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Release Telekinesis",
+    CurrentKeybind = "C", -- Keep it as a string if that's what your framework expects
+    HoldToInteract = false,
+    Flag = "ReleaseTelekinesisKeybind",
+    Callback = function()
+        plrlist = {};
+        local Players = game:GetService("Players");
+        for i, player in pairs(Players:GetPlayers()) do
+            spawn(function()
+                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[player.Name].Character);
+            end);
+        end
+    end,
 })
