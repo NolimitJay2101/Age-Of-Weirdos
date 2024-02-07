@@ -1118,6 +1118,7 @@ local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
                 end
             end
         end);
+    end
 })
 
 local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
