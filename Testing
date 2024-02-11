@@ -1030,24 +1030,21 @@ local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind = KeyBindsTab:CreateKeybind({
-    Name = "Toggle Telekinesis Void Fling",
-    CurrentKeybind = "Q",
+local TelekinesisVoidFlingKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Void Fling",
+    CurrentKeybind = "T",
     HoldToInteract = false,
     Flag = "TelekinesisVoidFlingKeybind",
     Callback = function(Keybind)
         if Keybind then
-            -- Toggle the televoid state
-            getgenv().televoid = not (getgenv().televoid or false)
-
-            -- If televoid is true, continuously invoke the Telekinesis server event
-            if getgenv().televoid then
-                repeat
-                    wait(0.2)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
-                until not getgenv().televoid
+            getgenv().televoid = true
+            while getgenv().televoid do
+                wait(0.2)
+                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
+                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
             end
+        else
+            getgenv().televoid = false
         end
     end,
 })
