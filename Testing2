@@ -1079,3 +1079,25 @@ local TelekinesisVoidFlingKeybind = KeyBindsTab:CreateKeybind({
         end
     end,
 })
+
+-- Define the keybind
+local Keybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space Fling Keybind",
+    CurrentKeybind = "H",
+    HoldToInteract = false,
+    Flag = "TelekinesisKeybind",
+    Callback = function(Keybind)
+        -- Check if the keybind is pressed
+        if Keybind then
+            -- Activate the telekinesis effect
+            spawn(function()
+                while true do
+                    wait(0.2)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
+                end
+            end)
+        end
+    end,
+ })
+ 
