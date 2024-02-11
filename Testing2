@@ -449,7 +449,7 @@ local TelekinesisSpaceFlingToggle = PlayerMenuTab:CreateToggle({
     end,
 })
 
-local Toggle = PlayerMenuTab:CreateToggle({
+local AntitelekinesisToggle = PlayerMenuTab:CreateToggle({
     Name = "Antitelekinesis",
     CurrentValue = false,
     Flag = "AntitelekinesisToggle",
@@ -462,6 +462,28 @@ local Toggle = PlayerMenuTab:CreateToggle({
                     wait();
                 end
             end);
+        end
+    end,
+})
+
+local TelekinesisVoidFlingToggle = PlayerMenuTab:CreateToggle({
+    Name = "Telekinesis Void Fling",
+    CurrentValue = false,
+    Flag = "TelekinesisVoidFlingToggle",
+    Callback = function(state)
+        if state then
+            getgenv().televoid = true
+            while televoid do
+                wait(0.2)
+                spawn(function()
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
+                end)
+            end
+        else
+            spawn(function()
+                getgenv().televoid = false
+            end)
         end
     end,
 })
