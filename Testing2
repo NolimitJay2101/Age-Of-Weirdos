@@ -1030,44 +1030,6 @@ local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind = Tab:CreateKeybind({
-    Name = "Telekinesis Kill", -- Name of the keybind
-    CurrentKeybind = "X", -- The key to trigger the keybind (you can change it to any key)
-    HoldToInteract = false, -- Whether the keybind should be held to activate (false means it's activated on press)
-    Flag = "Keybind1", -- Identifier for the configuration file
-    Callback = function(Keybind)
-        -- Spawn a new asynchronous thread to execute the following code
-        spawn(function()
-            -- Retrieve a list of nearby players within 99 studs
-            getNearPlayer(99)
-            
-            -- Iterate over each player in the list
-            for _, v in pairs(plrlist) do
-                -- Check if the current player is not the local player
-                if v ~= player then
-                    -- Spawn a new asynchronous thread to execute the following code
-                    spawn(function()
-                        -- Destroy the Neck part of the player's character
-                        v.Head.Neck:Destroy()
-                        
-                        -- Clear the list of nearby players
-                        plrlist = {}
-                        
-                        -- Wait for 0.2 seconds
-                        wait(0.2)
-                        
-                        -- Spawn a new asynchronous thread to execute the following code
-                        spawn(function()
-                            -- Invoke a server-side function named ToggleTelekinesis with certain arguments
-                            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
-                        end)
-                    end)
-                end
-            end
-        end)
-    end,
-})
-
 local Keybind = KeyBindsTab:CreateKeybind({
     Name = "Toggle Telekinesis Void Fling",
     CurrentKeybind = "Q",
