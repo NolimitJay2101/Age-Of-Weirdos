@@ -1050,8 +1050,6 @@ local TelekinesisVoidFlingKeybind = PlayerMenuTab:CreateKeybind({
     end,
 })
 
-
-
 local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     Name = "Release Telekinesis",
     CurrentKeybind = "C", -- Keep it as a string if that's what your framework expects
@@ -1064,6 +1062,20 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
             spawn(function()
                 game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[player.Name].Character);
             end);
+        end
+    end,
+})
+
+local TelekinesisVoidFlingKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Void Fling",
+    CurrentKeybind = "X",
+    HoldToInteract = false,
+    Flag = "TelekinesisVoidFlingKeybind",
+    Callback = function(Keybind)
+        if Keybind then
+            -- Trigger Telekinesis Void Fling once
+            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
+            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
         end
     end,
 })
