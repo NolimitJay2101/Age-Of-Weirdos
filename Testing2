@@ -1120,3 +1120,47 @@ local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
         end)
     end,
 })
+
+local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Void Kill",
+    CurrentKeybind = "X",
+    HoldToInteract = false,
+    Flag = "TelekinesisVoidKillKeybind", -- Unique flag for configuration saving
+    Callback = function(Keybind)
+        spawn(function()
+            local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
+            local TelekinesisEvent = game:GetService("ReplicatedStorage").Events.ToggleTelekinesis
+
+            -- Invoke server event to activate telekinesis
+            TelekinesisEvent:InvokeServer(LookVector, true)
+
+            -- Define a function to teleport another player into the void and kill them
+            local function VoidKillPlayer(player)
+                local character = player.Character
+
+                -- Check if the player's character exists
+                if character then
+                    -- Teleport character to specified position
+                    character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(-999999, -999999, -999999)))
+
+                    -- Kill the character after teleporting
+                    if character:FindFirstChildOfClass("Humanoid") then
+                        character:FindFirstChildOfClass("Humanoid"):TakeDamage(math.huge)
+                    end
+                end
+            end
+
+            -- Get a reference to the player you want to teleport to the void
+            local targetPlayer = game.Players.LocalPlayer -- Change this to the player you want to teleport
+
+            -- Delay to allow telekinesis to take effect
+            wait(1)
+
+            -- Perform the void kill (teleport and kill the target player)
+            VoidKillPlayer(targetPlayer)
+
+            -- Invoke server event to deactivate telekinesis
+            TelekinesisEvent:InvokeServer(LookVector, false)
+        end)
+    end,
+})
