@@ -1030,26 +1030,6 @@ local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local TelekinesisVoidFlingKeybind = PlayerMenuTab:CreateKeybind({
-    Name = "Telekinesis Void Fling",
-    CurrentKeybind = "G",
-    HoldToInteract = false,
-    Flag = "TelekinesisVoidFlingKeybind",
-    Callback = function(Keybind)
-        if Keybind then
-            -- Set televoid to true to activate Telekinesis Void Fling
-            getgenv().televoid = true
-            
-            -- Invoke the Telekinesis server event once
-            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
-            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
-        else
-            -- Set televoid to false to deactivate Telekinesis Void Fling
-            getgenv().televoid = false
-        end
-    end,
-})
-
 local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     Name = "Release Telekinesis",
     CurrentKeybind = "C", -- Keep it as a string if that's what your framework expects
@@ -1066,38 +1046,38 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local TelekinesisVoidFlingKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Void Fling",
-    CurrentKeybind = "X",
+local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Void Kill",
+    CurrentKeybind = "V",
     HoldToInteract = false,
-    Flag = "TelekinesisVoidFlingKeybind",
+    Flag = "TelekinesisVoidKillKeybind", -- Unique flag for configuration saving
     Callback = function(Keybind)
-        if Keybind then
-            -- Trigger Telekinesis Void Fling once
-            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
-            game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
-        end
+        spawn(function()
+            local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
+            local TelekinesisEvent = game:GetService("ReplicatedStorage").Events.ToggleTelekinesis
+
+            -- Invoke server event to activate telekinesis
+            TelekinesisEvent:InvokeServer(LookVector, true)
+
+            -- Define a function to check for and kill characters within a radius
+            local function VoidKill()
+                local TelekinesisPosition = game.Workspace.CurrentCamera.CFrame.Position
+                local Characters = game.Workspace:FindPartsInRegion3(Region3.new(TelekinesisPosition - Vector3.new(5, 5, 5), TelekinesisPosition + Vector3.new(5, 5, 5)), nil, math.huge)
+                for _, Character in ipairs(Characters) do
+                    if Character:IsA("Model") and Character:FindFirstChildOfClass("Humanoid") then
+                        Character:FindFirstChildOfClass("Humanoid"):TakeDamage(math.huge)
+                    end
+                end
+            end
+
+            -- Delay to allow telekinesis to take effect
+            wait(1)
+
+            -- Perform the void kill
+            VoidKill()
+
+            -- Invoke server event to deactivate telekinesis
+            TelekinesisEvent:InvokeServer(LookVector, false)
+        end)
     end,
 })
-
--- Define the keybind
-local Keybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Space Fling Keybind",
-    CurrentKeybind = "H",
-    HoldToInteract = false,
-    Flag = "TelekinesisKeybind",
-    Callback = function(Keybind)
-        -- Check if the keybind is pressed
-        if Keybind then
-            -- Activate the telekinesis effect
-            spawn(function()
-                while true do
-                    wait(0.2)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
-                end
-            end)
-        end
-    end,
- })
- 
