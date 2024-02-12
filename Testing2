@@ -1046,64 +1046,23 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-_G.CToggle = false
-_G.metalskin = false
-_G.LOCALPLAYER = game.Players.LocalPlayer.Name
-_G.bring = false
-local player = game.Players.LocalPlayer
-
-local breakvelocity = function()
-    spawn(function()
-        local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
-        delay(1, function()
-            BeenASecond = true
-        end)
-        while not BeenASecond do
-            for _, v in ipairs(player.Character:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.Velocity, v.RotVelocity = V3, V3
-                end
-            end
-            wait()
-        end
-    end)
-end
-
-local plrlist = {}
-local plrnum = 0
-
-local getNearPlayer = function(maxDistance)
-    pcall(function()
-        if player and player.Character then
-            local playerLocation = player.Character.HumanoidRootPart.Position
-            for _, v in pairs(game.Players:GetPlayers()) do
-                if v.Character and v.Character.Health > 0 then
-                    local location = v.Character.HumanoidRootPart.Position
-                    if (location - playerLocation).Magnitude <= maxDistance and v.Character.Health > 0 then
-                        pcall(function()
-                            if v ~= player then
-                                local teleexist = game:GetService("Workspace")[v.Name].HumanoidRootPart
-                                if not teleexist:FindFirstChild("telekinesisPosition") then
-                                    plrnum = plrnum + 1
-                                    table.insert(plrlist, v.Character)
-                                end
-                            end
-                        end)
-                    end
+local Keybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Kill",
+    CurrentKeybind = "X",
+    HoldToInteract = false,
+    Flag = "TelekinesisKill",
+    Callback = function(Keybind)
+        if Keybind then
+            getNearPlayer(99)
+            for i, v in pairs(plrlist) do
+                if (v == player) then
+                else
+                    v.Head.Neck:Destroy()
                 end
             end
         end
-    end)
-end
-
-local GetList = function()
-    local x = 1
-    local Plyr = game.Players:GetPlayers()
-    dropdown = {}
-    for _, v in pairs(Plyr) do
-        table.insert(dropdown, v.Name)
     end
-end
+})
 
 local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
    Name = "Carry Player",
