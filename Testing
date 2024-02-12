@@ -1105,7 +1105,7 @@ local GetList = function()
     end
 end
 
-local CarryPlayerKeybind = Tab:CreateKeybind({
+local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
    Name = "Carry Player",
    CurrentKeybind = "H",
    HoldToInteract = false,
