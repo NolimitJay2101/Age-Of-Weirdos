@@ -1046,54 +1046,13 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Void Kill",
-    CurrentKeybind = "V",
+local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Kill",
+    CurrentKeybind = "G",
     HoldToInteract = false,
-    Flag = "TelekinesisVoidKillKeybind", -- Unique flag for configuration saving
+    Flag = "TelekinesisKillKeybind", -- Unique flag for configuration saving
     Callback = function(Keybind)
-        spawn(function()
-            local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
-            local TelekinesisEvent = game:GetService("ReplicatedStorage").Events.ToggleTelekinesis
-
-            -- Get all players affected by telekinesis
-            local players = game.Players:GetPlayers()
-            for _, player in ipairs(players) do
-                local character = player.Character
-                if character then
-                    local humanoid = character:FindFirstChildOfClass("Humanoid")
-                    if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Physics then
-                        -- Teleport player's character to the void
-                        character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(-999999, -999999, -999999)))
-
-                        -- Kill the character after teleporting
-                        humanoid:TakeDamage(math.huge)
-                    end
-                end
-            end
-
-            -- Deactivate telekinesis
-            TelekinesisEvent:InvokeServer(LookVector, false)
-        end)
-    end,
-})
-
-local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Space Fling",
-    CurrentKeybind = "F",
-    HoldToInteract = false,
-    Flag = "TelekinesisSpaceFlingKeybind", -- Unique flag for configuration saving
-    Callback = function(Keybind)
-        -- Check if the keybind is pressed down
-        if Keybind.UserInputState == Enum.UserInputState.Begin then
-            getgenv().telesauras = true
-            spawn(function()
-                while telesauras do
-                    wait(0.2)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
-                end
-            end)
-        end
+        local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
+        game:GetService("ReplicatedStorage").Events.TelekinesisKill:InvokeServer(LookVector)
     end,
 })
