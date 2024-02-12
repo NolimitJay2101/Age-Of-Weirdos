@@ -1056,3 +1056,31 @@ local TelekinesisKillKeybind = KeyBindsTab:CreateKeybind({
         game:GetService("ReplicatedStorage").Events.TelekinesisKill:InvokeServer(LookVector)
     end,
 })
+
+local Keybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space Fling Keybind",
+    CurrentKeybind = "X",
+    HoldToInteract = false,
+    Flag = "TelekinesisSpaceFlingKeybind",
+    Callback = function(Keybind)
+        -- The function that takes place when the keybind is pressed
+        -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+        if Keybind then
+            -- Execute the action associated with the keybind
+            -- For example, you can trigger the Telekinesis Space Fling here
+            getgenv().telesauras = true
+            while telesauras do
+                wait(0.2)
+                spawn(function()
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
+                end)
+            end
+        else
+            -- Stop the action associated with the keybind if necessary
+            -- For example, you can stop the Telekinesis Space Fling here
+            getgenv().telesauras = false
+        end
+    end,
+ })
+ 
