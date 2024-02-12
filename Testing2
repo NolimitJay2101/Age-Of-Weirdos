@@ -1077,3 +1077,23 @@ local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
         end)
     end,
 })
+
+local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space Fling",
+    CurrentKeybind = "F",
+    HoldToInteract = false,
+    Flag = "TelekinesisSpaceFlingKeybind", -- Unique flag for configuration saving
+    Callback = function(Keybind)
+        -- Check if the keybind is pressed down
+        if Keybind.UserInputState == Enum.UserInputState.Begin then
+            getgenv().telesauras = true
+            spawn(function()
+                while telesauras do
+                    wait(0.2)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
+                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
+                end
+            end)
+        end
+    end,
+})
