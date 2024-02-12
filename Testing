@@ -1046,54 +1046,89 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local TelekinesisVoidKillKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Void Kill",
-    CurrentKeybind = "V",
-    HoldToInteract = false,
-    Flag = "TelekinesisVoidKillKeybind", -- Unique flag for configuration saving
-    Callback = function(Keybind)
-        spawn(function()
-            local LookVector = game.Workspace.CurrentCamera.CFrame.LookVector
-            local TelekinesisEvent = game:GetService("ReplicatedStorage").Events.ToggleTelekinesis
+_G.CToggle = false
+_G.metalskin = false
+_G.LOCALPLAYER = game.Players.LocalPlayer.Name
+_G.bring = false
+local player = game.Players.LocalPlayer
 
-            -- Get all players affected by telekinesis
-            local players = game.Players:GetPlayers()
-            for _, player in ipairs(players) do
-                local character = player.Character
-                if character then
-                    local humanoid = character:FindFirstChildOfClass("Humanoid")
-                    if humanoid and humanoid:GetState() == Enum.HumanoidStateType.Physics then
-                        -- Teleport player's character to the void
-                        character:SetPrimaryPartCFrame(CFrame.new(Vector3.new(-999999, -999999, -999999)))
+local breakvelocity = function()
+    spawn(function()
+        local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
+        delay(1, function()
+            BeenASecond = true
+        end)
+        while not BeenASecond do
+            for _, v in ipairs(player.Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.Velocity, v.RotVelocity = V3, V3
+                end
+            end
+            wait()
+        end
+    end)
+end
 
-                        -- Kill the character after teleporting
-                        humanoid:TakeDamage(math.huge)
+local plrlist = {}
+local plrnum = 0
+
+local getNearPlayer = function(maxDistance)
+    pcall(function()
+        if player and player.Character then
+            local playerLocation = player.Character.HumanoidRootPart.Position
+            for _, v in pairs(game.Players:GetPlayers()) do
+                if v.Character and v.Character.Health > 0 then
+                    local location = v.Character.HumanoidRootPart.Position
+                    if (location - playerLocation).Magnitude <= maxDistance and v.Character.Health > 0 then
+                        pcall(function()
+                            if v ~= player then
+                                local teleexist = game:GetService("Workspace")[v.Name].HumanoidRootPart
+                                if not teleexist:FindFirstChild("telekinesisPosition") then
+                                    plrnum = plrnum + 1
+                                    table.insert(plrlist, v.Character)
+                                end
+                            end
+                        end)
                     end
                 end
             end
-
-            -- Deactivate telekinesis
-            TelekinesisEvent:InvokeServer(LookVector, false)
-        end)
-    end,
-})
-
-local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Space Fling",
-    CurrentKeybind = "F",
-    HoldToInteract = false,
-    Flag = "TelekinesisSpaceFlingKeybind", -- Unique flag for configuration saving
-    Callback = function(Keybind)
-        -- Check if the keybind is pressed down
-        if Keybind.UserInputState == Enum.UserInputState.Begin then
-            getgenv().telesauras = true
-            spawn(function()
-                while telesauras do
-                    wait(0.2)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
-                    game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
-                end
-            end)
         end
-    end,
+    end)
+end
+
+local GetList = function()
+    local x = 1
+    local Plyr = game.Players:GetPlayers()
+    dropdown = {}
+    for _, v in pairs(Plyr) do
+        table.insert(dropdown, v.Name)
+    end
+end
+
+local CarryPlayerKeybind = Tab:CreateKeybind({
+   Name = "Carry Player",
+   CurrentKeybind = "H",
+   HoldToInteract = false,
+   Flag = "CarryPlayerKeybind",
+   Callback = function(Keybind)
+       if Keybind then
+           if not _G.CToggle then
+               _G.CToggle = true
+               getgenv().CarryP = true
+               while CarryP do
+                   wait()
+                   for _, v in pairs(plrlist) do
+                       local Xt = player.Character.HumanoidRootPart.Position.X
+                       local Yt = player.Character.HumanoidRootPart.Position.Y + 8
+                       local Zt = player.Character.HumanoidRootPart.Position.Z + 5
+                       game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt, Zt)
+                   end
+               end
+           else
+               _G.CToggle = false
+               plrlist = {}
+               getgenv().CarryP = false
+           end
+       end
+   end,
 })
