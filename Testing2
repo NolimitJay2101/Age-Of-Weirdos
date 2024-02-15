@@ -1105,11 +1105,11 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind = KeyBindsTab:CreateKeybind({
+local TelekinesiskillKeybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis kill",
     CurrentKeybind = "G", -- It's recommended to use a single key for the keybind
     HoldToInteract = false,
-    Flag = "Keybind1", -- Ensure each keybind has a unique flag if using configuration saving
+    Flag = "TelekinesiskillKeybind", -- Ensure each keybind has a unique flag if using configuration saving
     Callback = function()
         spawn(function()
             getNearPlayer(99)
@@ -1127,5 +1127,41 @@ local Keybind = KeyBindsTab:CreateKeybind({
             end
             plrlist = {}
         end)
+    end
+})
+
+local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Carry Player",
+    CurrentKeybind = "H",
+    HoldToInteract = false,
+    Flag = "CarryPlayerKeybind", 
+    Callback = function(Keybind)
+        if Keybind then
+            spawn(function()
+                getNearPlayer(99)
+                wait()
+                _G.CToggle = true
+                getgenv().CarryP = true
+                while CarryP do
+                    wait()
+                    spawn(function()
+                        for _, v in pairs(plrlist) do
+                            if v ~= player then
+                                local Xt = player.Character.HumanoidRootPart.Position.X
+                                local Yt = player.Character.HumanoidRootPart.Position.Y
+                                local Zt = player.Character.HumanoidRootPart.Position.Z
+                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt + 8, Zt + 5)
+                            end
+                        end
+                    end)
+                end
+            end)
+        else
+            spawn(function()
+                _G.CToggle = false
+                plrlist = {}
+                getgenv().CarryP = false
+            end)
+        end
     end
 })
