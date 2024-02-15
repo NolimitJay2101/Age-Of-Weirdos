@@ -1135,8 +1135,8 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
     CurrentKeybind = "H",
     HoldToInteract = false,
     Flag = "CarryPlayerKeybind", 
-    Callback = function(Keybind)
-        if Keybind then
+    Callback = function()
+        if _G.CToggle == false then
             spawn(function()
                 getNearPlayer(99)
                 wait()
@@ -1148,20 +1148,33 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
                         for _, v in pairs(plrlist) do
                             if v ~= player then
                                 local Xt = player.Character.HumanoidRootPart.Position.X
-                                local Yt = player.Character.HumanoidRootPart.Position.Y
-                                local Zt = player.Character.HumanoidRootPart.Position.Z
-                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt + 8, Zt + 5)
+                                local Yt = player.Character.HumanoidRootPart.Position.Y + 8
+                                local Zt = player.Character.HumanoidRootPart.Position.Z + 5
+                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt, Zt)
                             end
                         end
                     end)
                 end
             end)
         else
-            spawn(function()
-                _G.CToggle = false
-                plrlist = {}
-                getgenv().CarryP = false
-            end)
+            _G.CToggle = false
+            plrlist = {}
+            getgenv().CarryP = false
         end
     end
+})
+
+local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space",
+    CurrentKeybind = "3",
+    HoldToInteract = false,
+    Flag = "TelekinesisLockKeybind", -- Unique flag for configuration saving
+    Callback = function(Keybind)
+       spawn(function()
+          -- Set the coordinates to teleport the object
+          local TeleportCoordinates = Vector3.new(-999999, -999999, -999999)
+          game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(TeleportCoordinates, true)
+          game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(TeleportCoordinates, false)
+       end)
+    end,
 })
