@@ -1105,19 +1105,61 @@ local ReleaseTelekinesisKeybind = KeyBindsTab:CreateKeybind({
     end,
 })
 
-local Keybind = KeyBindsTab:CreateKeybind({
+local TelekinesiskillKeybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis kill",
     CurrentKeybind = "G", -- It's recommended to use a single key for the keybind
     HoldToInteract = false,
-    Flag = "Keybind1", -- Ensure each keybind has a unique flag if using configuration saving
-    Callback = function(Keybind)
+    Flag = "TelekinesiskillKeybind", -- Ensure each keybind has a unique flag if using configuration saving
+    Callback = function()
         spawn(function()
-            getNearPlayer(99);
-            for i, v in pairs(plrlist) do
-                v.Head.Neck:Destroy();
-                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Parent.Name]);
+            getNearPlayer(99)
+            for _, v in pairs(plrlist) do
+                if v ~= player then
+                    spawn(function()
+                        if v.Head and v.Head.Neck then
+                            v.Head.Neck:Destroy()
+                        end
+                        plrlist = {}
+                        wait(0.2)
+                        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(1, 1, 1), false, game.Players[v.Name].Character)
+                    end)
+                end
             end
-            plrlist = {};
+            plrlist = {}
         end)
+    end
+})
+
+local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Carry Player",
+    CurrentKeybind = "H",
+    HoldToInteract = false,
+    Flag = "CarryPlayerKeybind", 
+    Callback = function()
+        if _G.CToggle == false then
+            spawn(function()
+                getNearPlayer(99)
+                wait()
+                _G.CToggle = true
+                getgenv().CarryP = true
+                while CarryP do
+                    wait()
+                    spawn(function()
+                        for _, v in pairs(plrlist) do
+                            if v ~= player then
+                                local Xt = player.Character.HumanoidRootPart.Position.X
+                                local Yt = player.Character.HumanoidRootPart.Position.Y + 8
+                                local Zt = player.Character.HumanoidRootPart.Position.Z + 5
+                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt, Zt)
+                            end
+                        end
+                    end)
+                end
+            end)
+        else
+            _G.CToggle = false
+            plrlist = {}
+            getgenv().CarryP = false
+        end
     end
 })
