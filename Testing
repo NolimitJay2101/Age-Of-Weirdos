@@ -1163,3 +1163,14 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
         end
     end
 })
+
+local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space Fling",
+    CurrentKeybind = "3",
+    HoldToInteract = false,
+    Flag = "TelekinesisSpaceFlingKeybind",
+    Callback = function(Keybind)
+        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
+        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
+    end,
+})
