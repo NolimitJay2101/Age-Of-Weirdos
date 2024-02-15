@@ -71,3 +71,37 @@ local TelekinesiskillKeybind = KeyBindsTab:CreateKeybind({
         end)
     end
 })
+
+local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Carry Player",
+    CurrentKeybind = "H",
+    HoldToInteract = false,
+    Flag = "CarryPlayerKeybind", 
+    Callback = function()
+        if _G.CToggle == false then
+            spawn(function()
+                getNearPlayer(99)
+                wait()
+                _G.CToggle = true
+                getgenv().CarryP = true
+                while CarryP do
+                    wait()
+                    spawn(function()
+                        for _, v in pairs(plrlist) do
+                            if v ~= player then
+                                local Xt = player.Character.HumanoidRootPart.Position.X
+                                local Yt = player.Character.HumanoidRootPart.Position.Y + 8
+                                local Zt = player.Character.HumanoidRootPart.Position.Z + 5
+                                game:GetService("Workspace")[v.Name].HumanoidRootPart.telekinesisPosition.Position = Vector3.new(Xt, Yt, Zt)
+                            end
+                        end
+                    end)
+                end
+            end)
+        else
+            _G.CToggle = false
+            plrlist = {}
+            getgenv().CarryP = false
+        end
+    end
+})
