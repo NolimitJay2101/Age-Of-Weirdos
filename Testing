@@ -1174,3 +1174,97 @@ local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
         game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
     end,
 })
+
+--Misc Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local MiscTab = Window:CreateTab("Misc")
+local MiscSection = MiscTab:CreateSection("Misc")
+
+local AntiLagButton = MiscTab:CreateButton({
+    Name = "AntiLag",
+    Callback = function()
+        local Terrain = workspace:FindFirstChildOfClass("Terrain")
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterReflectance = 0
+        Terrain.WaterTransparency = 0
+        settings().Rendering.QualityLevel = 1
+        for i, v in pairs(game:GetDescendants()) do
+            if (v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart")) then
+                v.Material = "Plastic"
+                v.Reflectance = 0
+            elseif v:IsA("Decal") then
+                v.Transparency = 1
+            elseif (v:IsA("ParticleEmitter") or v:IsA("Trail")) then
+                v.Lifetime = NumberRange.new(0)
+            elseif v:IsA("Explosion") then
+                v.BlastPressure = 1
+                v.BlastRadius = 1
+            end
+        end
+        workspace.DescendantAdded:Connect(function(child)
+            coroutine.wrap(function()
+                if child:IsA("ForceField") then
+                    RunService.Heartbeat:Wait()
+                    child:Destroy()
+                elseif child:IsA("Sparkles") then
+                    RunService.Heartbeat:Wait()
+                    child:Destroy()
+                elseif (child:IsA("Smoke") or child:IsA("Fire")) then
+                    RunService.Heartbeat:Wait()
+                    child:Destroy()
+                end
+            end)()
+        end)
+    end,
+})
+
+local GroundCrackButton = MiscTab:CreateButton({
+    Name = "Ground Crack Lag",
+    Callback = function()
+        for i = 1, 1000 do
+            game:GetService("ReplicatedStorage").Events.GroundCrack:FireServer()
+        end
+    end,
+})
+
+local MiniCrashButton = MiscTab:CreateButton({
+    Name = "Mini Crash",
+    Callback = function()
+        local x = 0
+        repeat
+            x = x + 1
+            game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer("true")
+        until x == 5000 
+        game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer(false)
+        wait()
+        game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer(false)
+    end,
+})
+
+local ServerCrasherButton = MiscTab:CreateButton({
+    Name = "Server Crasher",
+    Callback = function()
+        local x = 0
+        repeat
+            x = x + 1
+            game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer("true")
+        until x == 50000 
+        game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer(false)
+        wait(0.2)
+        game:GetService("ReplicatedStorage").Events.ToggleBlocking:FireServer(false)
+    end,
+})
+
+local BreakVelocityButton = MiscTab:CreateButton({
+    Name = "Break Velocity",
+    Callback = function()
+        breakvelocity()
+    end,
+})
+
+local ResetButton = MiscTab:CreateButton({
+    Name = "Reset",
+    Callback = function()
+        player.Character:BreakJoints()
+    end,
+})
