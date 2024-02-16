@@ -1130,11 +1130,11 @@ local TelekinesiskillKeybind = KeyBindsTab:CreateKeybind({
     end
 })
 
-local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
+local TelekinesisVoidKeybind = KeyBindsTab:CreateKeybind({
     Name = "Telekinesis Void",
     CurrentKeybind = "X",
     HoldToInteract = false,
-    Flag = "TelekinesisLockKeybind", -- Unique flag for configuration saving
+    Flag = "TelekinesisVoidKeybind", -- Unique flag for configuration saving
     Callback = function(Keybind)
         local televoid = true -- Initialize televoid locally
         while televoid do
@@ -1142,6 +1142,26 @@ local TelekinesisLockKeybind = KeyBindsTab:CreateKeybind({
             local success, error = pcall(function()
                 game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
                 game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
+            end)
+            if not success then
+                warn("Error invoking ToggleTelekinesis:", error)
+            end
+        end
+    end
+})
+
+local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
+    Name = "Telekinesis Space Fling",
+    CurrentKeybind = "Z",
+    HoldToInteract = false,
+    Flag = "TelekinesisSpaceFlingKeybind",
+    Callback = function(Keybind)
+        local telesauras = true -- Initialize telesauras locally
+        while telesauras do
+            wait(0.2)
+            local success, error = pcall(function()
+                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), true)
+                game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(999999, 999999, 999999), false)
             end)
             if not success then
                 warn("Error invoking ToggleTelekinesis:", error)
@@ -1183,17 +1203,6 @@ local CarryPlayerKeybind = KeyBindsTab:CreateKeybind({
             getgenv().CarryP = false
         end
     end
-})
-
-local TelekinesisSpaceFlingKeybind = KeyBindsTab:CreateKeybind({
-    Name = "Telekinesis Space Fling",
-    CurrentKeybind = "3",
-    HoldToInteract = false,
-    Flag = "TelekinesisSpaceFlingKeybind",
-    Callback = function(Keybind)
-        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), true)
-        game:GetService("ReplicatedStorage").Events.ToggleTelekinesis:InvokeServer(Vector3.new(-999999, -999999, -999999), false)
-    end,
 })
 
 --Misc Window----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
