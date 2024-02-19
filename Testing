@@ -65,28 +65,18 @@ local Button = FarmTab:CreateButton({
 local Button = FarmTab:CreateButton({
     Name = "Collect All Orbs",
     Callback = function()
-        local orbNumber = 1
-        local orbArgs = {}
-        local orbsCollected = 0
-
-        repeat
-            orbArgs = {{orbNumber}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Orbs: Collect"):FireServer(unpack(orbArgs))
-            orbsCollected = orbsCollected + 1
-            orbNumber = orbNumber + 1
-            wait(0.5) -- Adjust the wait time if needed to avoid server spamming
-        until not game:GetService("ReplicatedStorage"):WaitForChild("Orbs"):FindFirstChild(tostring(orbNumber))
-
-        print("Collected " .. orbsCollected .. " orbs.")
-    end
-})
-
-local Button = FarmTab:CreateButton({
-    Name = "Collect All Orbs2",
-    Callback = function()
         local clientMagicOrbs = game:GetService("Players").LocalPlayer:WaitForChild("ClientMagicOrbs")
+        local orbs = {}
+        
+        -- Collect all orb numbers
         for _, orb in ipairs(clientMagicOrbs:GetChildren()) do
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Orbs: Collect"):FireServer(orb.Number.Value)
+            table.insert(orbs, {orb.Number.Value})
+        end
+        
+        -- Fire the Orbs: Collect remote event with each orb number
+        local remotePath = game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Orbs: Collect")
+        for _, args in ipairs(orbs) do
+            remotePath:FireServer(unpack(args))
         end
     end
 })
