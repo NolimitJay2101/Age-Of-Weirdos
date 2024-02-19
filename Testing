@@ -61,3 +61,19 @@ local Button = FarmTab:CreateButton({
         end
     end
 })
+
+local Button = MainSection:CreateButton({
+    Name = "Collect All Orbs",
+    Callback = function()
+        local orbs = { -- Specify the number of orbs you want to collect
+            {4},
+            {5},
+            -- Add more orb numbers as needed
+        }
+
+        for _, orbArgs in ipairs(orbs) do
+            local args = {orbArgs}
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Orbs: Collect"):FireServer(unpack(args))
+        end
+    end
+})
