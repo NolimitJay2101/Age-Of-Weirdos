@@ -51,7 +51,7 @@ local Button = Tab:CreateButton({
 local FarmTab = Window:CreateTab("Farm") -- Title, Image
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
-local Button = MainSection:CreateButton({
+local Button = FarmTab:CreateButton({
     Name = "Fire Breakables_JoinPet",
     Callback = function()
         local argsList = {
