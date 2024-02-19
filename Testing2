@@ -41,13 +41,6 @@ Rayfield:Notify({
     },
 })
 
-local Button = Tab:CreateButton({
-    Name = "Button Example",
-    Callback = function()
-    -- The function that takes place when the button is pressed
-    end,
-})
-
 local FarmTab = Window:CreateTab("Farm") -- Title, Image
 local MainSection = FarmTab:CreateSection("AutoFarm")
 
@@ -66,5 +59,24 @@ local Button = FarmTab:CreateButton({
         for _, args in ipairs(argsList) do
             invokeFunction(args)
         end
+    end
+})
+
+local Button = FarmTab:CreateButton({
+    Name = "Collect All Orbs",
+    Callback = function()
+        local orbNumber = 1
+        local orbArgs = {}
+        local orbsCollected = 0
+
+        repeat
+            orbArgs = {{orbNumber}}
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Orbs: Collect"):FireServer(unpack(orbArgs))
+            orbsCollected = orbsCollected + 1
+            orbNumber = orbNumber + 1
+            wait(0.5) -- Adjust the wait time if needed to avoid server spamming
+        until not game:GetService("ReplicatedStorage"):WaitForChild("Orbs"):FindFirstChild(tostring(orbNumber))
+
+        print("Collected " .. orbsCollected .. " orbs.")
     end
 })
